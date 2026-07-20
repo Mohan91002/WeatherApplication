@@ -1,7 +1,7 @@
 # Dependencies & Requirements — WeatherApplication
 
 Everything needed to build and run the two units: the **.NET 10 API** (backend)
-and the **Angular 18 SPA** (frontend). Extracted from `WeatherApplication.csproj`,
+and the **Angular 18 SPA** (frontend). Extracted from `backend/WeatherApplication.csproj`,
 `backend/Tests/WeatherApplication.Tests.csproj`, and `frontend/package.json`.
 
 ---
@@ -26,7 +26,7 @@ and the **Angular 18 SPA** (frontend). Extracted from `WeatherApplication.csproj
 
 ## 2. Backend — .NET (NuGet)
 
-### Runtime (`WeatherApplication.csproj`, `net10.0`)
+### Runtime (`backend/WeatherApplication.csproj`, `net10.0`)
 | Package | Version | Purpose |
 | ------- | ------- | ------- |
 | `Microsoft.AspNetCore.OpenApi` | `10.0.0` | OpenAPI document generation for the minimal API. |
@@ -35,7 +35,7 @@ and the **Angular 18 SPA** (frontend). Extracted from `WeatherApplication.csproj
 Uses the ASP.NET Core shared framework (`Microsoft.NET.Sdk.Web`) for hosting,
 DI, `HttpClient`, `MemoryCache`, CORS, etc. — no extra packages needed.
 
-### Test (`Tests/WeatherApplication.Tests.csproj`, `net10.0`)
+### Test (`backend/Tests/WeatherApplication.Tests.csproj`, `net10.0`)
 | Package | Version | Purpose |
 | ------- | ------- | ------- |
 | `Microsoft.NET.Test.Sdk` | `17.12.0` | Test host/runner. |
