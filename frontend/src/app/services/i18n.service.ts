@@ -30,7 +30,7 @@ const EN: Dict = {
   aqi: 'AQI',
   year: 'Year',
   find: 'FIND',
-  searchPlaceholder: 'country or capital…',
+  searchPlaceholder: 'Country',
   loading: 'acquiring live weather & air quality…',
   loadError: 'Unable to load live weather. Is the API running on port 5135?',
   allPlotted: 'all {n} stations plotted',
