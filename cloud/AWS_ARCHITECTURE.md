@@ -95,7 +95,7 @@ flowchart TB
 
 **Fallback path:** if App Runner can't reach Open-Meteo/FX, the browser fetches
 them directly and POSTs raw data to `/api/regions/merge`; the API still does all
-merging/classification/localization. No business logic in the client.
+merging/classification. No business logic in the client.
 
 ---
 
@@ -124,14 +124,14 @@ merging/classification/localization. No business logic in the client.
 3. Angular boots, detects locale, and calls the API.
 
 **B. Live data**
-1. SPA → `GET https://<api>/api/regions?lang=xx` (CORS-allowed origin).
-2. App Runner returns cached, merged, **localized** data (weather + air + currency).
-3. On cache miss the API fetches Open-Meteo + FX, merges, caches (1h), localizes per request.
+1. SPA → `GET https://<api>/api/regions` (CORS-allowed origin).
+2. App Runner returns cached, merged data (weather + air + currency).
+3. On cache miss the API fetches Open-Meteo + FX, merges, and caches (1h).
 
 **C. Fallback** (API host can't reach upstream)
 1. `GET /api/regions` returns placeholder rows → SPA detects no live data.
 2. SPA fetches `/api/countries`, calls Open-Meteo + FX from the browser, POSTs raw
-   results to `/api/regions/merge` → API merges/classifies/localizes.
+   results to `/api/regions/merge` → API merges/classifies.
 
 **D. Deploy**
 1. Push to `main` → Actions runs backend + frontend tests.

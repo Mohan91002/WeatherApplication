@@ -18,13 +18,11 @@ presentation-only.**
 - **Live currency exchange rates** (open.er-api.com), USD-based, cached.
 - **Server-side classification** — WMO code → description, AQI → category,
   °C → °F — never in the client.
-- **Auto-localization** to the browser language across **7 languages**
-  (en, hi, es, fr, ar, zh, ja) including **Arabic RTL**, plus a language switcher.
-- **Interactive world map** that pans/zooms to the hovered station with cursor parallax.
+- **Interactive world map** that pans/zooms to the hovered station.
 - Sort (country / capital / AQI / year), search, favourites, India pinned first, infinite scroll.
 - **Resilient by design** — if the backend can't reach the upstream APIs, the
   browser relays the raw responses back and the API *still* performs all
-  merging / classification / localization. The browser holds no domain logic.
+  merging / classification. The browser holds no domain logic.
 
 ---
 
@@ -40,7 +38,7 @@ presentation-only.**
 | Tooling & scripts | **JavaScript** (Node), **Bash** / **PowerShell** |
 
 **Skills demonstrated:** REST API design · third-party API integration with
-caching, retry & browser-relay fallback · internationalization & RTL ·
+caching, retry & browser-relay fallback ·
 responsive UI and interactive SVG data-visualization · unit + integration
 testing (xUnit + `WebApplicationFactory`; Karma/Jasmine) · infrastructure-as-code ·
 containerization · CI/CD with OIDC · AWS cloud architecture · security hardening
@@ -57,7 +55,7 @@ WeatherApplication/
 │   ├── Program.cs                 # host wiring: services, CORS, middleware
 │   ├── Endpoints/                 # HTTP routes (WeatherEndpoints.cs)
 │   ├── Models/                    # DTOs (WeatherForecast, CountryInfo, RegionWeather, …)
-│   ├── Services/                  # weather/FX integration, classification, localization
+│   ├── Services/                  # weather/FX integration, classification
 │   ├── Data/Countries.cs          # 253 countries/territories (name, capital, coords, currency, year)
 │   ├── Properties/                # launchSettings.json
 │   ├── appsettings*.json          # config
@@ -66,7 +64,7 @@ WeatherApplication/
 │   ├── .dockerignore              # backend build-context ignore (Docker context = backend/)
 │   └── Tests/                     # xUnit unit + integration tests
 ├── frontend/                 # TypeScript / Angular 18 SPA — presentation only
-│   ├── src/app/                   # components, services (i18n, map-focus, weather), models, shared
+│   ├── src/app/                   # components, services (map-focus, weather), models, shared
 │   ├── dev-serve.mjs              # launches `ng serve` via Node (no global ng/yarn needed)
 │   └── package.json
 ├── cloud/                    # deployment & infrastructure
@@ -95,16 +93,15 @@ Everything that isn't purely visual is server-side:
 | Live weather + air quality (fetch, chunk, retry, merge, cache) | `backend/Services/RegionWeatherService.cs` → `GET /api/regions` |
 | Live exchange rates (USD base, cached) | `backend/Services/CurrencyRatesService.cs` |
 | WMO code → description, AQI → category, °C → °F | `backend/Services/WeatherClassifier.cs` |
-| Localized weather/AQI terms (7 languages) via `?lang=` | `backend/Services/Localizer.cs` |
 | Gradients, emoji, colours, layout, sorting, search, favourites, UI strings | `frontend/` (presentation only) |
 
 ### API endpoints
 
 | Method | Route | Purpose |
 | ------ | ----- | ------- |
-| `GET`  | `/weatherforecast` | Mock 5-day forecast |
+| `GET`  | `/weatherforecast` | Mock 7-day forecast (starts Wednesday) |
 | `GET`  | `/api/countries` | The country dataset |
-| `GET`  | `/api/regions` | Live weather + air quality + currency, merged & localized server-side |
+| `GET`  | `/api/regions` | Live weather + air quality + currency, merged server-side |
 | `POST` | `/api/regions/merge` | Fallback: merges raw Open-Meteo + FX results relayed by the browser |
 
 ---

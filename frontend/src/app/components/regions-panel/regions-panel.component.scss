@@ -41,36 +41,6 @@
     gap: 1rem;
   }
 
-  &__lang {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.25rem 0.6rem;
-    background: var(--ink-2);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-  }
-
-  &__lang-icon {
-    font-size: 0.9rem;
-    opacity: 0.85;
-  }
-
-  &__lang-select {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--paper);
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-
-    option {
-      color: #000;
-    }
-  }
-
   &__title {
     display: flex;
     align-items: center;

@@ -45,7 +45,7 @@ CloudFront.
 - [ ] Custom domain: `domain_name` + `hosted_zone_id` set → ACM validated, Route 53 alias live.
 - [ ] CloudWatch alarms on 5xx and p95 latency; log retention set.
 - [ ] Autoscaling min 1 / max 3 (App Runner concurrency).
-- [ ] Translations reviewed by native speakers; Lighthouse/a11y pass.
+- [ ] Lighthouse/a11y pass.
 
 ## Optional scale/security add-ons
 - **ElastiCache (Redis)** for a shared cache when running >1 instance.

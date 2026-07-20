@@ -55,8 +55,8 @@ flowchart TB
 **Fallback path:** if the API host can't reach Open-Meteo/FX, `GET /api/regions`
 returns placeholder rows; the SPA detects this, fetches coordinates from
 `/api/countries`, calls the upstreams from the browser, and POSTs the raw results
-to `POST /api/regions/merge`. The API still performs *all* merge / classification
-/ localization. In a normal deployment (API has egress) the fallback never fires.
+to `POST /api/regions/merge`. The API still performs *all* merge / classification.
+In a normal deployment (API has egress) the fallback never fires.
 
 ---
 
@@ -86,14 +86,14 @@ to `POST /api/regions/merge`. The API still performs *all* merge / classificatio
 3. Angular boots, detects the browser locale, and calls the API.
 
 **B. Live data**
-1. SPA → `GET /api/regions?lang=xx` (same origin via the proxy, or a CORS-allowed origin).
-2. API returns cached, merged, **localized** data (weather + air + currency).
-3. On cache miss the API fetches Open-Meteo + FX, merges, caches (1h), localizes per request.
+1. SPA → `GET /api/regions` (same origin via the proxy, or a CORS-allowed origin).
+2. API returns cached, merged data (weather + air + currency).
+3. On cache miss the API fetches Open-Meteo + FX, merges, and caches (1h).
 
 **C. Fallback** (API host has no egress)
 1. `GET /api/regions` returns placeholders → SPA detects no live data.
 2. SPA fetches `/api/countries`, calls Open-Meteo + FX from the browser, POSTs raw
-   results to `/api/regions/merge` → API merges/classifies/localizes.
+   results to `/api/regions/merge` → API merges/classifies.
 
 **D. Deploy**
 1. Push to `main` → CI runs backend tests + frontend build/tests.
