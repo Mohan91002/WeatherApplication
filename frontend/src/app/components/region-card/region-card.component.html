@@ -58,11 +58,13 @@
     <span class="stn__conditions">{{ region().summary }}</span>
   </div>
 
-  @if (region().officialLanguage) {
-    <p class="stn__lang" title="Official language">🗣 {{ region().officialLanguage }}</p>
-  }
-
   <dl class="stn__readouts">
+    @if (region().officialLanguage) {
+      <div class="stn__row">
+        <dt>{{ i18n.t('lang') }}</dt>
+        <dd class="stn__lang">{{ region().officialLanguage }}</dd>
+      </div>
+    }
     <div class="stn__row">
       <dt>{{ i18n.t('temp') }}</dt>
       <dd class="stn__temp" [style.color]="tempColor()">

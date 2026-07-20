@@ -21,6 +21,7 @@ const EN: Dict = {
   loadError: 'Unable to load live weather. Is the API running on port 5135?',
   allPlotted: 'all {n} stations plotted',
   showing: 'showing {v} / {t}',
+  lang: 'LANG',
   temp: 'TEMP',
   air: 'AIR',
   fx: 'FX',
