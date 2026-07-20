@@ -21,15 +21,18 @@ public class EndpointsTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
-    public async Task GetWeatherForecast_returns_five_days()
+    public async Task GetWeatherForecast_returns_seven_days_starting_wednesday()
     {
         var client = _factory.CreateClient();
 
         var forecast = await client.GetFromJsonAsync<List<JsonElement>>("/weatherforecast");
 
         Assert.NotNull(forecast);
-        Assert.Equal(5, forecast!.Count);
+        Assert.Equal(7, forecast!.Count);
         Assert.True(forecast[0].TryGetProperty("temperatureF", out _));
+
+        var firstDay = DateOnly.Parse(forecast[0].GetProperty("date").GetString()!);
+        Assert.Equal(DayOfWeek.Wednesday, firstDay.DayOfWeek);
     }
 
     [Fact]

@@ -39,7 +39,11 @@
     vector-effect: non-scaling-stroke;
   }
 
-  /* --- focused-location marker --- */
+  /* --- focused-location marker (hidden per design; the map still pans on hover) --- */
+  &__marker {
+    display: none;
+  }
+
   &__marker-halo {
     fill: rgba(242, 166, 90, 0.18);
     animation: marker-pulse 2.2s ease-out infinite;

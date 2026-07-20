@@ -23,7 +23,7 @@ public static class WeatherEndpoints
         app.MapGet("/health", () => Results.Ok(new { status = "healthy" }))
             .WithName("Health");
 
-        // Mock 5-day forecast (unchanged).
+        // Mock 7-day forecast starting on the upcoming Wednesday.
         app.MapGet("/weatherforecast", GetForecast)
             .WithName("GetWeatherForecast");
 
@@ -50,11 +50,19 @@ public static class WeatherEndpoints
         return app;
     }
 
-    private static WeatherForecast[] GetForecast() =>
-        Enumerable.Range(1, 5).Select(index =>
+    private static WeatherForecast[] GetForecast()
+    {
+        // The 7-day outlook always begins on the upcoming Wednesday
+        // (today if today is already Wednesday).
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var daysUntilWednesday = ((int)DayOfWeek.Wednesday - (int)today.DayOfWeek + 7) % 7;
+        var start = today.AddDays(daysUntilWednesday);
+
+        return Enumerable.Range(0, 7).Select(offset =>
             new WeatherForecast(
-                DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                start.AddDays(offset),
                 Random.Shared.Next(-20, 55),
                 Summaries[Random.Shared.Next(Summaries.Length)]))
         .ToArray();
+    }
 }
