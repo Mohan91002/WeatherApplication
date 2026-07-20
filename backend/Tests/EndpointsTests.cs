@@ -75,30 +75,4 @@ public class EndpointsTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.Equal(70, afghanistan.GetProperty("currencyRate").GetDouble());
         Assert.Equal(1709, afghanistan.GetProperty("establishedYear").GetInt32());
     }
-
-    [Fact]
-    public async Task PostRegionsMerge_localizes_summary_when_lang_is_requested()
-    {
-        var client = _factory.CreateClient();
-        var body = new
-        {
-            forecast = new[]
-            {
-                new { timezone = "Asia/Kabul", current = new { temperature_2m = 30.6, weather_code = 95 } },
-            },
-            air = new[] { new { current = new { us_aqi = 175 } } },
-            rates = new Dictionary<string, double>(),
-        };
-
-        var response = await client.PostAsJsonAsync("/api/regions/merge?lang=hi", body);
-
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var regions = await response.Content.ReadFromJsonAsync<List<JsonElement>>();
-        Assert.NotNull(regions);
-        var afghanistan = regions![0];
-        Assert.Equal("आंधी-तूफान", afghanistan.GetProperty("summary").GetString()); // Thunderstorm
-        Assert.Equal("अस्वस्थ", afghanistan.GetProperty("aqiCategory").GetString()); // Unhealthy
-        // Numeric fields remain canonical.
-        Assert.Equal(95, afghanistan.GetProperty("weatherCode").GetInt32());
-    }
 }

@@ -33,18 +33,16 @@ public static class WeatherEndpoints
             .WithName("GetCountries");
 
         // Live weather + air quality for every country, fetched and merged
-        // server-side and localized to ?lang= (weather descriptions + AQI
-        // categories). Returns placeholder rows if the host cannot reach
+        // server-side. Returns placeholder rows if the host cannot reach
         // Open-Meteo (the client then falls back to relaying the data itself).
-        app.MapGet("/api/regions", async (IRegionWeatherService service, string? lang, CancellationToken ct) =>
-                await service.GetLiveRegionsAsync(lang ?? "en", ct))
+        app.MapGet("/api/regions", async (IRegionWeatherService service, CancellationToken ct) =>
+                await service.GetLiveRegionsAsync(ct))
             .WithName("GetRegions");
 
         // Fallback: the browser relays raw Open-Meteo results and the backend
-        // performs all merging/classification/localization. No business logic in
-        // the client.
-        app.MapPost("/api/regions/merge", (RegionMergeRequest body, IRegionWeatherService service, string? lang) =>
-                service.MergeRelayed(body, lang ?? "en"))
+        // performs all merging and classification. No business logic in the client.
+        app.MapPost("/api/regions/merge", (RegionMergeRequest body, IRegionWeatherService service) =>
+                service.MergeRelayed(body))
             .WithName("MergeRegions");
 
         return app;

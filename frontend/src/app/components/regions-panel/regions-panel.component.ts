@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit, computed, effect, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { RegionWeather } from '../../models/region-weather.model';
 import { WeatherService } from '../../services/weather.service';
-import { I18nService, Lang } from '../../services/i18n.service';
+import { I18nService } from '../../services/i18n.service';
 import { RegionCardComponent } from '../region-card/region-card.component';
 
 /** Field the country list can be sorted by. */
@@ -90,20 +90,11 @@ export class RegionsPanelComponent implements OnInit, OnDestroy {
 
   protected readonly i18n = inject(I18nService);
 
-  constructor(private readonly weatherService: WeatherService) {
-    // Re-fetch region data whenever the language changes (the initial run also
-    // performs the first load), so backend-localized summaries/AQI update too.
-    effect(
-      () => {
-        this.i18n.lang();
-        this.refreshRegions();
-      },
-      { allowSignalWrites: true },
-    );
-  }
+  constructor(private readonly weatherService: WeatherService) {}
 
   ngOnInit(): void {
     this.favorites.set(this.loadFavorites());
+    this.refreshRegions();
     this.refreshTimer = setInterval(() => this.refreshRegions(), RegionsPanelComponent.REFRESH_MS);
     this.clockTimer = setInterval(() => this.now.set(Date.now()), RegionsPanelComponent.CLOCK_MS);
     window.addEventListener('scroll', this.scrollHandler, { passive: true });
@@ -122,10 +113,6 @@ export class RegionsPanelComponent implements OnInit, OnDestroy {
   setSort(field: SortField): void {
     this.sortField.set(field);
     this.visibleCount.set(RegionsPanelComponent.PAGE_SIZE);
-  }
-
-  onLanguageChange(lang: string): void {
-    this.i18n.setLang(lang as Lang);
   }
 
   onSearch(value: string): void {

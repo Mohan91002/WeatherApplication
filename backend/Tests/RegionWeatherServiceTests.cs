@@ -88,26 +88,6 @@ public class RegionWeatherServiceTests
     }
 
     [Fact]
-    public void MergeRelayed_localizes_summary_and_aqi_for_the_requested_language()
-    {
-        var service = CreateService();
-        var request = new RegionMergeRequest
-        {
-            Forecast = [new ForecastResult { Current = new ForecastCurrent { Temperature2m = 30, WeatherCode = 95 } }],
-            Air = [new AirQualityResult { Current = new AirQualityCurrent { UsAqi = 175 } }],
-            Rates = new Dictionary<string, double>(),
-        };
-
-        var hindi = service.MergeRelayed(request, "hi")[0];
-        Assert.Equal("आंधी-तूफान", hindi.Summary); // Thunderstorm
-        Assert.Equal("अस्वस्थ", hindi.AqiCategory); // Unhealthy
-
-        // Canonical numeric fields are unaffected by localization.
-        Assert.Equal(95, hindi.WeatherCode);
-        Assert.Equal(175, hindi.Aqi);
-    }
-
-    [Fact]
     public void MergeRelayed_leaves_currency_rate_unavailable_when_code_missing_from_rates()
     {
         var service = CreateService();

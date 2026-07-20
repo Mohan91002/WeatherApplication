@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, forkJoin, map, of, retry, switchMap, tap } from 'rxjs';
 import { WeatherForecast } from '../models/weather-forecast.model';
 import { RegionWeather } from '../models/region-weather.model';
-import { I18nService } from './i18n.service';
 import { environment } from '../../environments/environment';
 
 /** Country coordinates served by the .NET API (GET /api/countries). */
@@ -80,10 +79,7 @@ export class WeatherService {
   private static readonly CACHE_KEY = 'weatherCacheV1';
   private static readonly CACHE_TTL_MS = 60 * 60 * 1000;
 
-  constructor(
-    private readonly http: HttpClient,
-    private readonly i18n: I18nService,
-  ) {}
+  constructor(private readonly http: HttpClient) {}
 
   /**
    * Fetches the 5-day forecast from the backend.
@@ -98,18 +94,16 @@ export class WeatherService {
    * Open-Meteo, falls back to the browser relay.
    */
   getLiveRegions(): Observable<RegionWeather[]> {
-    const lang = this.i18n.lang();
-    const cached = this.readCache(lang);
+    const cached = this.readCache();
     if (cached) {
       return of(cached);
     }
-    const url = `${WeatherService.REGIONS_URL}?lang=${encodeURIComponent(lang)}`;
-    return this.http.get<RegionWeather[]>(url).pipe(
+    return this.http.get<RegionWeather[]>(WeatherService.REGIONS_URL).pipe(
       catchError(() => of<RegionWeather[]>([])),
       switchMap((regions) =>
-        this.hasLiveData(regions) ? of(regions) : this.fetchViaBrowserRelay(lang),
+        this.hasLiveData(regions) ? of(regions) : this.fetchViaBrowserRelay(),
       ),
-      tap((data) => this.writeCache(lang, data)),
+      tap((data) => this.writeCache(data)),
     );
   }
 
@@ -119,8 +113,8 @@ export class WeatherService {
    * browser, then POST the raw results back so the backend does all
    * merging/classification.
    */
-  private fetchViaBrowserRelay(lang: string): Observable<RegionWeather[]> {
-    const mergeUrl = `${WeatherService.MERGE_URL}?lang=${encodeURIComponent(lang)}`;
+  private fetchViaBrowserRelay(): Observable<RegionWeather[]> {
+    const mergeUrl = WeatherService.MERGE_URL;
     return this.http.get<CountryInfo[]>(WeatherService.COUNTRIES_URL).pipe(
       switchMap((countries) => {
         const chunks = this.chunk(countries, WeatherService.CHUNK_SIZE);
@@ -200,14 +194,9 @@ export class WeatherService {
     return regions.length > 0 && regions.some((r) => r.weatherCode >= 0 || r.aqi >= 0);
   }
 
-  /** Cache key is per-language, since summaries/AQI labels are localized. */
-  private cacheKey(lang: string): string {
-    return `${WeatherService.CACHE_KEY}_${lang}`;
-  }
-
-  private readCache(lang: string): RegionWeather[] | null {
+  private readCache(): RegionWeather[] | null {
     try {
-      const raw = localStorage.getItem(this.cacheKey(lang));
+      const raw = localStorage.getItem(WeatherService.CACHE_KEY);
       if (!raw) {
         return null;
       }
@@ -219,7 +208,7 @@ export class WeatherService {
     }
   }
 
-  private writeCache(lang: string, data: RegionWeather[]): void {
+  private writeCache(data: RegionWeather[]): void {
     // Only cache a result that actually contains live data, so a rate-limited
     // (blank) response is not persisted for an hour.
     if (!this.hasLiveData(data)) {
@@ -227,7 +216,7 @@ export class WeatherService {
     }
     try {
       localStorage.setItem(
-        this.cacheKey(lang),
+        WeatherService.CACHE_KEY,
         JSON.stringify({ ts: Date.now(), data }),
       );
     } catch {

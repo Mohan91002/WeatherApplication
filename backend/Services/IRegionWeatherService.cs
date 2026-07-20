@@ -15,12 +15,12 @@ public interface IRegionWeatherService
     /// entries with placeholder values (temperature 0, AQI -1) when the host
     /// cannot reach Open-Meteo — the caller can detect this and fall back.
     /// </summary>
-    Task<IReadOnlyList<RegionWeather>> GetLiveRegionsAsync(string lang = "en", CancellationToken ct = default);
+    Task<IReadOnlyList<RegionWeather>> GetLiveRegionsAsync(CancellationToken ct = default);
 
     /// <summary>
     /// Merges raw Open-Meteo results — relayed by the browser when the backend
     /// host cannot reach Open-Meteo — against the full country dataset. The
     /// arrays are index-aligned with <see cref="Data.Countries.All"/>.
     /// </summary>
-    IReadOnlyList<RegionWeather> MergeRelayed(RegionMergeRequest request, string lang = "en");
+    IReadOnlyList<RegionWeather> MergeRelayed(RegionMergeRequest request);
 }

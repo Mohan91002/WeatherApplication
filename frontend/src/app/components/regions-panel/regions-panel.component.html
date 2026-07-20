@@ -5,19 +5,6 @@
         <span class="regions__live">● {{ i18n.t('live') }}</span>
         {{ i18n.t('stationsReporting', { n: totalCountries() }) }}
       </p>
-      <label class="regions__lang">
-        <span class="regions__lang-icon" aria-hidden="true">🌐</span>
-        <select
-          class="regions__lang-select"
-          [value]="i18n.lang()"
-          (change)="onLanguageChange($any($event.target).value)"
-          [attr.aria-label]="i18n.t('language')"
-        >
-          @for (l of i18n.languages; track l) {
-            <option [value]="l">{{ i18n.names[l] }}</option>
-          }
-        </select>
-      </label>
     </div>
 
     <h1 class="regions__title">{{ i18n.t('boardTitle') }}</h1>

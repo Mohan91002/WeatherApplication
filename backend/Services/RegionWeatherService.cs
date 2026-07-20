@@ -35,11 +35,11 @@ public sealed class RegionWeatherService : IRegionWeatherService
     }
 
     /// <inheritdoc />
-    public async Task<IReadOnlyList<RegionWeather>> GetLiveRegionsAsync(string lang = "en", CancellationToken ct = default)
+    public async Task<IReadOnlyList<RegionWeather>> GetLiveRegionsAsync(CancellationToken ct = default)
     {
         if (_cache.TryGetValue(CacheKey, out IReadOnlyList<RegionWeather>? cached) && cached is not null)
         {
-            return Localize(cached, lang);
+            return cached;
         }
 
         var rates = await _currency.GetRatesAsync(ct);
@@ -57,37 +57,12 @@ public sealed class RegionWeatherService : IRegionWeatherService
             _cache.Set(CacheKey, (IReadOnlyList<RegionWeather>)results, CacheTtl);
         }
 
-        return Localize(results, lang);
+        return results;
     }
 
     /// <inheritdoc />
-    public IReadOnlyList<RegionWeather> MergeRelayed(RegionMergeRequest request, string lang = "en") =>
-        Localize(Merge(Countries.All, request.Forecast, request.Air, request.Rates), lang);
-
-    /// <summary>
-    /// Translates the canonical (English) summary and AQI category of each region
-    /// into the requested language. The cache stays canonical/language-neutral;
-    /// localization is applied per request. English is returned unchanged.
-    /// </summary>
-    private static IReadOnlyList<RegionWeather> Localize(IReadOnlyList<RegionWeather> regions, string lang)
-    {
-        if (Localizer.Normalize(lang) == "en")
-        {
-            return regions;
-        }
-
-        var localized = new List<RegionWeather>(regions.Count);
-        foreach (var region in regions)
-        {
-            localized.Add(region with
-            {
-                Summary = Localizer.Translate(region.Summary, lang),
-                AqiCategory = Localizer.Translate(region.AqiCategory, lang),
-            });
-        }
-
-        return localized;
-    }
+    public IReadOnlyList<RegionWeather> MergeRelayed(RegionMergeRequest request) =>
+        Merge(Countries.All, request.Forecast, request.Air, request.Rates);
 
     private async Task<(IReadOnlyList<ForecastResult> Forecast, IReadOnlyList<AirQualityResult> Air)>
         FetchChunkAsync(IReadOnlyList<CountryInfo> countries, CancellationToken ct)

@@ -95,12 +95,12 @@ export class RegionCardComponent {
   /** Formats an exchange rate with thousands separators and adaptive precision. */
   private formatRate(rate: number): string {
     const maximumFractionDigits = rate >= 100 ? 0 : rate >= 1 ? 2 : 4;
-    return new Intl.NumberFormat(this.i18n.lang(), { maximumFractionDigits }).format(rate);
+    return new Intl.NumberFormat('en', { maximumFractionDigits }).format(rate);
   }
 
   private formatLocalTime(timeZone: string, timestamp: number): string {
     try {
-      return new Intl.DateTimeFormat(this.i18n.lang(), {
+      return new Intl.DateTimeFormat('en', {
         hour: '2-digit',
         minute: '2-digit',
         hourCycle: 'h23',
