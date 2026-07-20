@@ -234,37 +234,6 @@
     letter-spacing: 0.05em;
     color: var(--paper-dim);
   }
-
-  &__scroll-fab {
-    position: fixed;
-    right: 1.5rem;
-    bottom: 1.5rem;
-    z-index: 50;
-    width: 3rem;
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--ink);
-    background: var(--mercury);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
-    }
-  }
-
-  &__scroll-fab-arrow {
-    font-size: 1.4rem;
-    font-weight: 700;
-    line-height: 1;
-    animation: fab-bounce 1.4s ease-in-out infinite;
-  }
 }
 
 /* --- live-extremes chips --- */
@@ -320,16 +289,6 @@
     .ex__v {
       color: var(--isobar);
     }
-  }
-}
-
-@keyframes fab-bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(4px);
   }
 }
 

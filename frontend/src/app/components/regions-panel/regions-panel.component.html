@@ -126,16 +126,4 @@
       }
     }
   </div>
-
-  @if (!allLoaded()) {
-    <button
-      type="button"
-      class="regions__scroll-fab"
-      (click)="loadMore()"
-      [attr.aria-label]="i18n.t('showing', { v: visibleCount(), t: total() })"
-      title="+5"
-    >
-      <span class="regions__scroll-fab-arrow">↓</span>
-    </button>
-  }
 </section>
