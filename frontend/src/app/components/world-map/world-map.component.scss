@@ -12,14 +12,6 @@
   inset: 0;
   background: radial-gradient(90% 80% at 50% 30%, rgba(111, 208, 196, 0.05), transparent 60%);
 
-  /* Parallax layer: fast, subtle cursor follow. */
-  &__parallax {
-    position: absolute;
-    inset: 0;
-    transition: transform 0.18s ease-out;
-    will-change: transform;
-  }
-
   /* Focus layer: slow, eased pan/zoom to the hovered country. */
   &__focus {
     position: absolute;

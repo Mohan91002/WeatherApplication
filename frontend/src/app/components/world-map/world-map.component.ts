@@ -11,11 +11,9 @@ import { WORLD_LAND_PATH } from './world-map.data';
 /**
  * Interactive world-map background. The map is an equirectangular land outline
  * (viewBox 0..360 x 0..180). It pans and zooms to whichever country a card is
- * hovered over (via {@link MapFocusService}) and parallax-follows the cursor
- * over the background. A pulsing marker pins the focused location.
- *
- * Two nested transforms keep it smooth: focus pan/zoom eases slowly, while the
- * cursor parallax responds quickly.
+ * hovered over (via {@link MapFocusService}); when no card is hovered it holds
+ * the default, centred world view — it does not react to plain cursor movement.
+ * A pulsing marker pins the focused location.
  */
 @Component({
   selector: 'app-world-map',
@@ -34,8 +32,6 @@ export class WorldMapComponent {
   protected readonly focus = this.focusService.focus;
 
   private readonly viewport = signal({ w: 1440, h: 900 });
-  private readonly cursor = signal({ nx: 0, ny: 0 });
-  private lastMove = 0;
 
   /** Default world-view centre (lon 10, lat 20) when nothing is hovered. */
   private static readonly DEFAULT = { lon: 10, lat: 20 };
@@ -55,7 +51,8 @@ export class WorldMapComponent {
     return { x: focus.lon + 180, y: 90 - focus.lat, label: focus.label };
   });
 
-  /** Focus pan/zoom transform (transform-origin: 0 0), eased slowly. */
+  /** Focus pan/zoom transform (transform-origin: 0 0), eased slowly. Only the
+   *  hovered card (or the default view) drives this — not the cursor. */
   protected readonly focusTransform = computed(() => {
     const { w, h } = this.viewport();
     const focus = this.focus();
@@ -79,26 +76,8 @@ export class WorldMapComponent {
     return `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px) scale(${scale.toFixed(3)})`;
   });
 
-  /** Small cursor parallax translate, responds quickly. */
-  protected readonly parallaxTransform = computed(() => {
-    const { nx, ny } = this.cursor();
-    return `translate(${(-nx * 38).toFixed(1)}px, ${(-ny * 26).toFixed(1)}px)`;
-  });
-
   @HostListener('window:resize')
   onResize(): void {
     this.viewport.set({ w: window.innerWidth, h: window.innerHeight });
-  }
-
-  @HostListener('window:mousemove', ['$event'])
-  onMouseMove(event: MouseEvent): void {
-    // Throttle to ~30fps so parallax doesn't over-trigger change detection.
-    const now = event.timeStamp;
-    if (now - this.lastMove < 33) {
-      return;
-    }
-    this.lastMove = now;
-    const { w, h } = this.viewport();
-    this.cursor.set({ nx: event.clientX / w - 0.5, ny: event.clientY / h - 0.5 });
   }
 }
