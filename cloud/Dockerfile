@@ -1,5 +1,7 @@
 # syntax=docker/dockerfile:1
 # Multi-stage build for the WeatherApplication .NET 10 API.
+# Build CONTEXT is the backend/ folder. Build from the repo root with:
+#   docker build -f cloud/Dockerfile -t weatherapplication-api backend/
 # The Angular SPA is built + deployed separately (S3/CloudFront), not in this image.
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
@@ -9,7 +11,7 @@ WORKDIR /src
 COPY WeatherApplication.csproj ./
 RUN dotnet restore WeatherApplication.csproj
 
-# Copy the rest and publish (Tests/ and frontend/ are excluded via .dockerignore).
+# Copy the rest and publish (Tests/ excluded via backend/.dockerignore).
 COPY . .
 RUN dotnet publish WeatherApplication.csproj -c Release -o /app /p:UseAppHost=false
 

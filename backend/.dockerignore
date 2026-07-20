@@ -1,0 +1,6 @@
+# Build context is the backend/ folder. Keep the image lean.
+bin/
+obj/
+Tests/
+*.user
+*.http

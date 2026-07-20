@@ -1,20 +1,20 @@
 # Deployment Runbook — WeatherApplication
 
 Deploys the **.NET API** (container → ECR → App Runner) and the **Angular SPA**
-(S3 + CloudFront). See [PROJECT_PLAN.md](PROJECT_PLAN.md) for cost/estimates.
+(S3 + CloudFront). See [PROJECT_PLAN.md](../PROJECT_PLAN.md) for cost/estimates.
 
 ## Files
 | File | Purpose |
 | ---- | ------- |
-| `Dockerfile`, `.dockerignore` | Build the API container (non-root, port 8080) |
+| `Dockerfile`, `backend/.dockerignore` | Build the API container (non-root, port 8080; context `backend/`) |
 | `infra/*.tf` | Terraform: ECR, App Runner, S3, CloudFront, Route 53, ACM, CloudWatch |
-| `.github/workflows/deploy.yml` | CI/CD: test → build/push image → deploy API → sync SPA |
+| `../.github/workflows/deploy.yml` | CI/CD: test → build/push image → deploy API → sync SPA |
 | `deploy/jira-backlog.csv` | Importable backlog (Jira: **System → External System Import → CSV**) |
 
 ## One-time setup
 1. **Terraform provision** (creates ECR before the API can deploy):
    ```bash
-   cd infra
+   cd cloud/infra
    terraform init
    terraform apply -var="spa_origin=https://YOUR_SPA_DOMAIN"      # or the CloudFront domain
    ```
@@ -22,7 +22,7 @@ Deploys the **.NET API** (container → ECR → App Runner) and the **Angular SP
 2. **Seed the first image** (App Runner needs an image present):
    ```bash
    aws ecr get-login-password | docker login --username AWS --password-stdin <ecr_registry>
-   docker build -t <ecr_repository_url>:latest .
+   docker build -f cloud/Dockerfile -t <ecr_repository_url>:latest backend/
    docker push <ecr_repository_url>:latest
    ```
 3. **GitHub OIDC role** + set repo **vars/secrets** listed at the top of `deploy.yml`
@@ -54,7 +54,7 @@ CloudFront.
 
 ## Resource hygiene (local dev)
 Stop dev servers before building; run one build at a time; delete stale
-`bin/ obj/ frontend/dist frontend/.angular` when regenerating; stop preview
+`backend/bin backend/obj frontend/dist frontend/.angular` when regenerating; stop preview
 servers after verifying — keeps RAM low.
 
 ## Rename the project folder (`WebApplication` → `WeatherApplication`)

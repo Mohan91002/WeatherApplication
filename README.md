@@ -1,56 +1,89 @@
-# Weather Forecast — .NET API + Angular Frontend
+# Synoptic — World Weather Board
 
-A full-stack sample with a strict split: **all business logic lives in the .NET
-backend**, and the Angular frontend is presentation-only.
+A full-stack weather dashboard that plots **253 countries and territories** as
+live "synoptic stations" — each showing local time, temperature, sky conditions,
+air quality, and a live currency exchange rate — over an **interactive world-map
+backdrop** that pans and zooms to whichever station you hover.
 
-- **Backend** — .NET 10 minimal API. Owns the country dataset (incl. currency),
-  the Open-Meteo integration, the live FX-rate integration, and all
-  weather/AQI classification.
-- **Frontend** — Angular 18 standalone app (`frontend/`) with a "Synoptic"
-  weather-station design: each country is plotted as a station model (name,
-  capital, founding year, local time + zone, live temp/air/currency), with a
-  live world-extremes header over an **interactive world-map backdrop** that
-  pans/zooms to whichever card you hover (and parallax-follows the cursor). Sort
-  by country, capital, AQI or year. **Auto-localizes to the browser's language**
-  (en, hi, es, fr, ar, zh, ja — with a switcher and Arabic RTL); the UI strings
-  live in the frontend, the weather/AQI terms come localized from the backend.
-  It renders what the API returns and holds no domain logic.
+It is built as a deliberate full-stack reference with one strict architectural
+rule: **all business logic lives in the .NET backend; the Angular frontend is
+presentation-only.**
+
+---
+
+## What it does
+
+- **Live weather + air quality** for every country (via Open-Meteo) — fetched,
+  chunked, retried, merged, and cached server-side (1-hour shared cache).
+- **Live currency exchange rates** (open.er-api.com), USD-based, cached.
+- **Server-side classification** — WMO code → description, AQI → category,
+  °C → °F — never in the client.
+- **Auto-localization** to the browser language across **7 languages**
+  (en, hi, es, fr, ar, zh, ja) including **Arabic RTL**, plus a language switcher.
+- **Interactive world map** that pans/zooms to the hovered station with cursor parallax.
+- Sort (country / capital / AQI / year), search, favourites, India pinned first, infinite scroll.
+- **Resilient by design** — if the backend can't reach the upstream APIs, the
+  browser relays the raw responses back and the API *still* performs all
+  merging / classification / localization. The browser holds no domain logic.
+
+---
+
+## Languages & skills
+
+| Area | Languages / technologies |
+| ---- | ------------------------ |
+| Backend | **C# (.NET 10)** — minimal APIs, DI, typed `HttpClient`, `IMemoryCache`, CORS |
+| Frontend | **TypeScript**, **Angular 18** (standalone components, signals, `@if`/`@for`), **HTML**, **SCSS** |
+| Infrastructure as code | **HCL / Terraform** |
+| Containerization | **Docker** (multi-stage, non-root) |
+| CI/CD | **YAML** — GitHub Actions with OIDC |
+| Tooling & scripts | **JavaScript** (Node), **Bash** / **PowerShell** |
+
+**Skills demonstrated:** REST API design · third-party API integration with
+caching, retry & browser-relay fallback · internationalization & RTL ·
+responsive UI and interactive SVG data-visualization · unit + integration
+testing (xUnit + `WebApplicationFactory`; Karma/Jasmine) · infrastructure-as-code ·
+containerization · CI/CD with OIDC · AWS cloud architecture · security hardening
+(locked CORS, private S3 + CloudFront OAC, non-root container, dependency-vulnerability
+remediation).
+
+---
+
+## Project structure
 
 ```
 WeatherApplication/
-├── Program.cs                 # host wiring: services, CORS, middleware
-├── Endpoints/
-│   └── WeatherEndpoints.cs     # all HTTP routes
-├── Models/                     # WeatherForecast, CountryInfo, RegionWeather, Open-Meteo DTOs
-├── Data/
-│   └── Countries.cs            # 253 rows: 245 countries/territories + India's 8 union territories (name, capital, flag, coords, currency, founding year)
-├── Services/
-│   ├── WeatherClassifier.cs    # WMO code → description, AQI → category, °C → °F
-│   ├── Localizer.cs            # weather/AQI term translations (7 languages)
-│   ├── CurrencyRatesService.cs # live USD-based FX rates (open.er-api.com) + in-memory cache
-│   └── RegionWeatherService.cs # Open-Meteo fetch (chunk/retry/merge) + FX rates + localization + cache
-├── WeatherApplication.csproj
-├── appsettings*.json
-├── Properties/launchSettings.json
-└── frontend/                   # Angular 18 SPA (presentation only)
-    └── src/app/
-        ├── components/         # outlook, station cards, interactive world map
-        ├── services/i18n.service.ts      # auto-locale detection + UI translations + RTL
-        ├── services/map-focus.service.ts # shares the hovered location with the map
-        ├── services/weather.service.ts  # calls the .NET API (+ thin fallback relay)
-        ├── shared/weather-visuals.ts     # gradients, emoji, AQI/temp colours, sky-cover (pure UI)
-        └── models/                       # DTO shapes returned by the API
+├── backend/                  # C# / .NET 10 API — ALL business logic
+│   ├── Program.cs                 # host wiring: services, CORS, middleware
+│   ├── Endpoints/                 # HTTP routes (WeatherEndpoints.cs)
+│   ├── Models/                    # DTOs (WeatherForecast, CountryInfo, RegionWeather, …)
+│   ├── Services/                  # weather/FX integration, classification, localization
+│   ├── Data/Countries.cs          # 253 countries/territories (name, capital, coords, currency, year)
+│   ├── Properties/                # launchSettings.json
+│   ├── appsettings*.json          # config
+│   ├── WeatherApplication.http    # sample HTTP requests
+│   ├── WeatherApplication.csproj
+│   ├── .dockerignore              # backend build-context ignore (Docker context = backend/)
+│   └── Tests/                     # xUnit unit + integration tests
+├── frontend/                 # TypeScript / Angular 18 SPA — presentation only
+│   ├── src/app/                   # components, services (i18n, map-focus, weather), models, shared
+│   ├── dev-serve.mjs              # launches `ng serve` via Node (no global ng/yarn needed)
+│   └── package.json
+├── cloud/                    # deployment & infrastructure
+│   ├── Dockerfile                 # API container (multi-stage, non-root; build context = backend/)
+│   ├── infra/                     # Terraform: ECR, App Runner, S3, CloudFront, Route 53, ACM, CloudWatch
+│   ├── deploy/                    # CI/CD setup notes + importable Jira backlog
+│   ├── AWS_ARCHITECTURE.md        # AWS production topology (+ Mermaid diagram)
+│   └── DEPLOY.md                  # deployment runbook + go-live checklist
+├── ARCHITECTURE.md           # vendor-neutral architecture (proxy + containers) + Mermaid diagram
+├── DEPENDENCIES.md           # full dependency & toolchain inventory
+├── PROJECT_PLAN.md           # scope, estimates, cost
+├── PROMPTS.md
+├── CONTRIBUTING.md           # branch/PR workflow
+└── .github/workflows/deploy.yml   # CI/CD (must live at repo root)
 ```
 
-## Documentation
-
-| Doc | What it covers |
-| --- | -------------- |
-| [DEPENDENCIES.md](DEPENDENCIES.md) | Full toolchain, backend NuGet + frontend npm packages, external services, install/run commands. |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Vendor-neutral architecture (proxy + containers; Docker Compose / Kubernetes) — no cloud lock-in. |
-| [AWS_ARCHITECTURE.md](AWS_ARCHITECTURE.md) | AWS production topology (CloudFront + S3 + App Runner + ECR). |
-| [DEPLOY.md](DEPLOY.md) | Deployment runbook + go-live checklist. |
-| [PROJECT_PLAN.md](PROJECT_PLAN.md) | Scope, estimates, cost. |
+---
 
 ## Backend responsibilities
 
@@ -58,72 +91,84 @@ Everything that isn't purely visual is server-side:
 
 | Concern | Where |
 | ------- | ----- |
-| Country list + coordinates + currency (code/symbol) + founding year | `Data/Countries.cs` → `GET /api/countries` |
-| Live weather + air quality (fetch, chunk, retry, merge, cache) | `Services/RegionWeatherService.cs` → `GET /api/regions` |
-| Live exchange rates (USD base, cached) | `Services/CurrencyRatesService.cs` |
-| WMO code → description, AQI → category, °C → °F | `Services/WeatherClassifier.cs` |
-| Localized weather/AQI terms (en/hi/es/fr/ar/zh/ja) via `?lang=` | `Services/Localizer.cs` → `GET /api/regions`, `POST /api/regions/merge` |
-| Gradients, weather emoji, AQI colours, currency formatting, UI-string localization, layout, sorting, search, favourites | Angular frontend (`services/i18n.service.ts`) |
+| Country list + coordinates + currency + founding year | `backend/Data/Countries.cs` → `GET /api/countries` |
+| Live weather + air quality (fetch, chunk, retry, merge, cache) | `backend/Services/RegionWeatherService.cs` → `GET /api/regions` |
+| Live exchange rates (USD base, cached) | `backend/Services/CurrencyRatesService.cs` |
+| WMO code → description, AQI → category, °C → °F | `backend/Services/WeatherClassifier.cs` |
+| Localized weather/AQI terms (7 languages) via `?lang=` | `backend/Services/Localizer.cs` |
+| Gradients, emoji, colours, layout, sorting, search, favourites, UI strings | `frontend/` (presentation only) |
 
-### Endpoints
+### API endpoints
 
 | Method | Route | Purpose |
 | ------ | ----- | ------- |
 | `GET`  | `/weatherforecast` | Mock 5-day forecast |
 | `GET`  | `/api/countries` | The country dataset |
-| `GET`  | `/api/regions` | Live weather + air quality + currency rate for every country, merged server-side |
-| `POST` | `/api/regions/merge` | Fallback: merges raw Open-Meteo + FX results relayed by the browser (see below) |
+| `GET`  | `/api/regions` | Live weather + air quality + currency, merged & localized server-side |
+| `POST` | `/api/regions/merge` | Fallback: merges raw Open-Meteo + FX results relayed by the browser |
 
-### Live data & the browser fallback
+---
 
-The backend fetches Open-Meteo and the FX API directly and caches the results
-in memory for an hour (shared across clients, keeps us within the upstream rate
-limits). If the backend host cannot reach those APIs — some corporate networks
-intercept or block outbound HTTPS — `GET /api/regions` returns placeholder rows.
-The client detects that and falls back: it fetches the coordinates from
-`/api/countries`, calls Open-Meteo **and** the FX API from the browser, and POSTs
-the raw results back to `/api/regions/merge` so the backend still performs
-**all** merging and classification. The browser is only a network relay; it
-holds no business logic. In a normal deployment (backend has internet) the
-fallback never fires.
+## Getting started
 
-Exchange rates are live USD-based values from [open.er-api.com](https://open.er-api.com)
-(no API key). Each card shows the currency symbol and `$1 = <symbol><rate>`;
-currencies the FX API doesn't cover (a handful of the 245) show "rate
-unavailable".
+**Prerequisites:** .NET SDK 10+, Node.js 18.19+ / 20+ / 22+. Full list in
+[DEPENDENCIES.md](DEPENDENCIES.md).
 
-## Prerequisites
-
-| Tool | Version |
-| ---- | ------- |
-| .NET SDK | 10+ |
-| Node.js  | 18.19+ / 20+ / 22+ |
-| yarn     | 1.22+ (npm is broken in this environment) |
-
-## 1. Run the backend (port 5135)
-
+### 1. Run the backend — http://localhost:5135
 ```bash
-dotnet run
+dotnet run --project backend/WeatherApplication.csproj
 ```
+CORS is pre-configured for the Angular dev server at `http://localhost:4200`.
 
-API: <http://localhost:5135/api/regions>
-CORS is pre-configured to allow the Angular dev server at `http://localhost:4200`.
-
-## 2. Run the frontend (port 4200)
-
+### 2. Run the frontend — http://localhost:4200
 ```bash
 cd frontend
-yarn install
-yarn start
+npm install            # install dependencies (yarn also works)
+node dev-serve.mjs     # runs `ng serve` via Node — no global ng/yarn required
+```
+Then open <http://localhost:4200>. Both servers must be running; if the API is
+down the UI shows a friendly error.
+
+### Run the tests
+```bash
+# Backend — xUnit unit + integration tests
+dotnet test backend/Tests/WeatherApplication.Tests.csproj
+
+# Frontend — Karma/Jasmine
+cd frontend && node node_modules/@angular/cli/bin/ng.js test --watch=false
 ```
 
-Open <http://localhost:4200>. The dashboard shows a live card per country
-(temperature, conditions, local time, and colour-coded air quality), with India
-pinned first, favourites, search and infinite scroll.
+---
 
-## Notes
+## Deployment
 
-- Both servers must be running. If the API is down, the UI shows a friendly
-  error message.
-- The frontend uses Angular signals, standalone components, and the modern
-  `@if` / `@for` control-flow syntax.
+The API ships as a container (→ ECR → **AWS App Runner**) and the SPA as static
+assets (**S3 + CloudFront**). Build the image from the repo root:
+
+```bash
+docker build -f cloud/Dockerfile -t weatherapplication-api backend/
+```
+
+See [cloud/DEPLOY.md](cloud/DEPLOY.md) and [cloud/AWS_ARCHITECTURE.md](cloud/AWS_ARCHITECTURE.md)
+for the full runbook and topology, or [ARCHITECTURE.md](ARCHITECTURE.md) for a
+vendor-neutral (Docker Compose / Kubernetes) deployment.
+
+---
+
+## Documentation
+
+| Doc | Covers |
+| --- | ------ |
+| [DEPENDENCIES.md](DEPENDENCIES.md) | Toolchain + backend/frontend packages + external services |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Vendor-neutral architecture + diagram |
+| [cloud/AWS_ARCHITECTURE.md](cloud/AWS_ARCHITECTURE.md) | AWS production topology + diagram |
+| [cloud/DEPLOY.md](cloud/DEPLOY.md) | Deployment runbook + go-live checklist |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Branching / PR workflow |
+| [PROJECT_PLAN.md](PROJECT_PLAN.md) | Scope, estimates, cost |
+
+---
+
+## Contributing
+
+This repo uses a **feature-branch workflow** — branch off `main`, open a pull
+request, let CI run, then merge. Details in [CONTRIBUTING.md](CONTRIBUTING.md).

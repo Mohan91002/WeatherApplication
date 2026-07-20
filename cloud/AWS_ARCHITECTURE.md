@@ -2,7 +2,7 @@
 
 Production topology for the two deployable units: the **Angular SPA** (static,
 edge-delivered) and the **.NET 10 API** (container). Provisioned by the
-Terraform in [`infra/`](infra/); deployed by [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+Terraform in [`infra/`](infra/); deployed by [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml).
 
 ---
 
@@ -156,14 +156,14 @@ merging/classification/localization. No business logic in the client.
 
 ## 6. Cost (recap)
 Minimal ~**$35–60/mo**, scalable ~**$90–130/mo** — full breakdown in
-[PROJECT_PLAN.md §7](PROJECT_PLAN.md). Free Tier lowers year one.
+[PROJECT_PLAN.md §7](../PROJECT_PLAN.md). Free Tier lowers year one.
 
 ## 7. Where it lives in code
 ```
-infra/main.tf         ECR · App Runner · S3 · CloudFront (OAC) · Route53 · ACM · CloudWatch log group
-infra/monitoring.tf   CloudWatch dashboard + alarms + SNS
-infra/variables.tf    region, domain, sizing, alarm email
-Dockerfile            API container (multi-stage, non-root, :8080)
-.github/workflows/    CI/CD (OIDC → ECR → App Runner → S3/CloudFront)
-DEPLOY.md             runbook + go-live checklist
+cloud/infra/main.tf        ECR · App Runner · S3 · CloudFront (OAC) · Route53 · ACM · CloudWatch log group
+cloud/infra/monitoring.tf  CloudWatch dashboard + alarms + SNS
+cloud/infra/variables.tf   region, domain, sizing, alarm email
+cloud/Dockerfile           API container (multi-stage, non-root, :8080; build context backend/)
+.github/workflows/         CI/CD (OIDC → ECR → App Runner → S3/CloudFront)
+cloud/DEPLOY.md            runbook + go-live checklist
 ```

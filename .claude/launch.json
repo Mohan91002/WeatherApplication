@@ -4,7 +4,7 @@
     {
       "name": "dotnet-api",
       "runtimeExecutable": "dotnet",
-      "runtimeArgs": ["run", "--project", "WeatherApplication.csproj", "--launch-profile", "http"],
+      "runtimeArgs": ["run", "--project", "backend/WeatherApplication.csproj", "--launch-profile", "http"],
       "port": 5135
     },
     {

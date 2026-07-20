@@ -1,7 +1,7 @@
 # WeatherApplication — Architecture (vendor-neutral)
 
 A cloud-agnostic view of the same two deployable units described in
-[AWS_ARCHITECTURE.md](AWS_ARCHITECTURE.md), but expressed **without any AWS
+[AWS_ARCHITECTURE.md](cloud/AWS_ARCHITECTURE.md), but expressed **without any AWS
 (or other proprietary) service** — only portable building blocks you can run on
 a single VM, on-prem, in Docker Compose, or on Kubernetes.
 
@@ -142,7 +142,7 @@ static folder the proxy serves. Good for demos, small prod, on-prem.
 ## 6. Security
 - **TLS everywhere** — proxy terminates HTTPS; API honours forwarded proto.
 - **Same-origin or locked CORS** — `Cors:AllowedOrigins`, never `*`.
-- **Container runs as non-root** on port 8080 (see `Dockerfile`).
+- **Container runs as non-root** on port 8080 (see `cloud/Dockerfile`).
 - **No secrets in the client** — none needed today (keyless upstreams); use Vault/sealed
   secrets if that changes.
 - **Optional edge protection** — ModSecurity/Traefik middleware for rate-limiting.
@@ -158,7 +158,7 @@ static folder the proxy serves. Good for demos, small prod, on-prem.
 ## 8. Local development
 ```bash
 # Terminal 1 — API (http://localhost:5135)
-dotnet run --project WeatherApplication.csproj
+dotnet run --project backend/WeatherApplication.csproj
 
 # Terminal 2 — SPA (http://localhost:4200; CORS pre-allowed for :4200)
 cd frontend && node dev-serve.mjs

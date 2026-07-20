@@ -15,6 +15,8 @@ name: build-test-deploy
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -29,7 +31,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
-      - run: dotnet test Tests/WeatherApplication.Tests.csproj -c Release --nologo
+      - run: dotnet test backend/Tests/WeatherApplication.Tests.csproj -c Release --nologo
 
   frontend-test:
     runs-on: ubuntu-latest
@@ -49,6 +51,8 @@ jobs:
 
   deploy:
     needs: [backend-test, frontend-test]
+    # Deploy only on push to main / manual dispatch — never on pull requests.
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -70,7 +74,7 @@ jobs:
           REPO: ${{ vars.ECR_REPOSITORY }}
         run: |
           IMAGE="$REGISTRY/$REPO:${{ github.sha }}"
-          docker build -t "$IMAGE" -t "$REGISTRY/$REPO:latest" .
+          docker build -f cloud/Dockerfile -t "$IMAGE" -t "$REGISTRY/$REPO:latest" backend/
           docker push "$IMAGE"
           docker push "$REGISTRY/$REPO:latest"
 

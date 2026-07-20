@@ -2,7 +2,7 @@
 
 Everything needed to build and run the two units: the **.NET 10 API** (backend)
 and the **Angular 18 SPA** (frontend). Extracted from `WeatherApplication.csproj`,
-`Tests/WeatherApplication.Tests.csproj`, and `frontend/package.json`.
+`backend/Tests/WeatherApplication.Tests.csproj`, and `frontend/package.json`.
 
 ---
 
@@ -45,10 +45,10 @@ DI, `HttpClient`, `MemoryCache`, CORS, etc. — no extra packages needed.
 
 ### Build / run
 ```bash
-dotnet restore WeatherApplication.csproj
-dotnet build   WeatherApplication.csproj -c Release
-dotnet run     --project WeatherApplication.csproj   # http://localhost:5135
-dotnet test    Tests/WeatherApplication.Tests.csproj
+dotnet restore backend/WeatherApplication.csproj
+dotnet build   backend/WeatherApplication.csproj -c Release
+dotnet run     --project backend/WeatherApplication.csproj   # http://localhost:5135
+dotnet test    backend/Tests/WeatherApplication.Tests.csproj
 ```
 
 ---
@@ -102,8 +102,8 @@ egress failure the **browser** relays them and the backend still does all mergin
 
 | Dependency | Where | Purpose |
 | ---------- | ----- | ------- |
-| Docker | `Dockerfile`, `.dockerignore` | Multi-stage API container (non-root, port 8080). |
-| Terraform | `infra/*.tf` | Infrastructure-as-code (AWS topology). |
+| Docker | `cloud/Dockerfile`, `backend/.dockerignore` | Multi-stage API container (non-root, port 8080; build context `backend/`). |
+| Terraform | `cloud/infra/*.tf` | Infrastructure-as-code (AWS topology). |
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) (vendor-neutral) and
-[AWS_ARCHITECTURE.md](AWS_ARCHITECTURE.md) (AWS) for how these fit together.
+[cloud/AWS_ARCHITECTURE.md](cloud/AWS_ARCHITECTURE.md) (AWS) for how these fit together.
