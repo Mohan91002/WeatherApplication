@@ -44,7 +44,8 @@ public class EndpointsTests : IClassFixture<WebApplicationFactory<Program>>
 
         Assert.NotNull(countries);
         Assert.Equal(253, countries!.Count);
-        Assert.Contains(countries, c => c.GetProperty("country").GetString() == "India");
+        var india = countries!.Single(c => c.GetProperty("country").GetString() == "India");
+        Assert.Equal("Hindi, English", india.GetProperty("officialLanguage").GetString());
     }
 
     [Fact]

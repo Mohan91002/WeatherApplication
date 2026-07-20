@@ -58,6 +58,7 @@ public class RegionWeatherServiceTests
         Assert.Equal(70.0, afghanistan.CurrencyRate);
         Assert.Equal(1709, afghanistan.EstablishedYear);
         Assert.Equal("Asia/Kabul", afghanistan.TimeZone);
+        Assert.Equal("Pashto, Dari", afghanistan.OfficialLanguage);
     }
 
     [Fact]

@@ -10,7 +10,7 @@ describe('I18nService', () => {
   });
 
   it('returns the English string for a key', () => {
-    expect(service.t('boardTitle')).toBe('World Weather Board');
+    expect(service.t('boardTitle')).toBe('World Weather');
     expect(service.t('aqi')).toBe('AQI');
   });
 

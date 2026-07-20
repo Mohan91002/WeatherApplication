@@ -22,6 +22,7 @@ function makeRegion(overrides: Partial<RegionWeather> = {}): RegionWeather {
     currencySymbol: '₹',
     currencyRate: 96.5,
     establishedYear: 1947,
+    officialLanguage: 'Hindi, English',
     ...overrides,
   };
 }
@@ -80,6 +81,15 @@ describe('RegionCardComponent', () => {
     const host: HTMLElement = fixture.nativeElement;
     expect(host.querySelector('.stn__country')?.textContent).toContain('India');
     expect(host.querySelector('.stn__capital')?.textContent).toContain('New Delhi');
+  });
+
+  it('shows the official language, and hides the line when unknown', () => {
+    const host: HTMLElement = fixture.nativeElement;
+    expect(host.querySelector('.stn__lang')?.textContent).toContain('Hindi, English');
+
+    fixture.componentRef.setInput('region', makeRegion({ officialLanguage: '' }));
+    fixture.detectChanges();
+    expect(host.querySelector('.stn__lang')).toBeNull();
   });
 
   it('shows the time-zone label', () => {

@@ -40,4 +40,7 @@ public record RegionWeather
 
     /// <summary>Year the country/state was founded (0 when unknown).</summary>
     public int EstablishedYear { get; init; }
+
+    /// <summary>Official (or primary) language(s) of the country/territory.</summary>
+    public required string OfficialLanguage { get; init; }
 }

@@ -23,6 +23,7 @@ function region(country: string, temperatureC: number, aqi: number): RegionWeath
     currencySymbol: '$',
     currencyRate: 1,
     establishedYear: 1900,
+    officialLanguage: 'English',
   };
 }
 

@@ -36,6 +36,7 @@ function liveRegion(overrides: Partial<RegionWeather> = {}): RegionWeather {
     currencySymbol: '₹',
     currencyRate: 96.5,
     establishedYear: 1947,
+    officialLanguage: 'Hindi, English',
     ...overrides,
   };
 }

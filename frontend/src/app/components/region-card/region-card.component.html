@@ -36,6 +36,9 @@
     <div class="stn__names">
       <p class="stn__country">{{ region().country }}</p>
       <p class="stn__capital">{{ region().capital }}</p>
+      @if (region().officialLanguage) {
+        <p class="stn__lang" title="Official language">🗣 {{ region().officialLanguage }}</p>
+      }
     </div>
   </div>
 

@@ -28,4 +28,6 @@ export interface RegionWeather {
   readonly currencyRate: number;
   /** Year the country/state was founded (0 when unknown). */
   readonly establishedYear: number;
+  /** Official (or primary) language(s) of the country/territory. */
+  readonly officialLanguage: string;
 }

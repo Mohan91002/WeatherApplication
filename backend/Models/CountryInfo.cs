@@ -23,4 +23,8 @@ public record CountryInfo(
     double Longitude,
     string CurrencyCode,
     string CurrencySymbol,
-    int EstablishedYear);
+    int EstablishedYear)
+{
+    /// <summary>Official (or primary) language(s) of the country/territory.</summary>
+    public string OfficialLanguage { get; init; } = "";
+}

@@ -33,6 +33,12 @@ public class CountriesDataTests
     }
 
     [Fact]
+    public void Every_country_has_an_official_language()
+    {
+        Assert.All(Countries.All, c => Assert.False(string.IsNullOrWhiteSpace(c.OfficialLanguage)));
+    }
+
+    [Fact]
     public void Coordinates_are_within_valid_ranges()
     {
         Assert.All(Countries.All, c =>
@@ -58,5 +64,6 @@ public class CountriesDataTests
         Assert.Equal("INR", india.CurrencyCode);
         Assert.Equal("₹", india.CurrencySymbol);
         Assert.Equal(1947, india.EstablishedYear);
+        Assert.Equal("Hindi, English", india.OfficialLanguage);
     }
 }

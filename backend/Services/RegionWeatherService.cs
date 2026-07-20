@@ -168,6 +168,7 @@ public sealed class RegionWeatherService : IRegionWeatherService
                     : country.CurrencySymbol,
                 CurrencyRate = currencyRate,
                 EstablishedYear = country.EstablishedYear,
+                OfficialLanguage = country.OfficialLanguage,
             });
         }
 
