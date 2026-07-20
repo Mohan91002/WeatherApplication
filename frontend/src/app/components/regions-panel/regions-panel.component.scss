@@ -163,9 +163,8 @@
   }
 
   &__search-label {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.16em;
+    display: inline-flex;
+    align-items: center;
     color: var(--paper-dim);
   }
 
