@@ -76,7 +76,7 @@ export class WeatherService {
   private static readonly OPEN_METEO_AIR = 'https://air-quality-api.open-meteo.com/v1/air-quality';
   private static readonly EXCHANGE_RATES_URL = 'https://open.er-api.com/v6/latest/USD';
   private static readonly CHUNK_SIZE = 200;
-  private static readonly CACHE_KEY = 'weatherCacheV1';
+  private static readonly CACHE_KEY = 'weatherCacheV2';
   private static readonly CACHE_TTL_MS = 60 * 60 * 1000;
 
   constructor(private readonly http: HttpClient) {}
