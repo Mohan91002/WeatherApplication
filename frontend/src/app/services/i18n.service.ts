@@ -6,7 +6,7 @@ type Dict = Readonly<Record<string, string>>;
 const EN: Dict = {
   live: 'LIVE',
   stationsReporting: '{n} stations reporting',
-  boardTitle: 'World Weather Board',
+  boardTitle: 'World Weather',
   warmest: 'WARMEST',
   coldest: 'COLDEST',
   worstAir: 'WORST AIR',

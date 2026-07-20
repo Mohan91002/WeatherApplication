@@ -7,7 +7,22 @@
       </p>
     </div>
 
-    <h1 class="regions__title">{{ i18n.t('boardTitle') }}</h1>
+    <h1 class="regions__title">
+      <svg class="regions__logo" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="5" fill="currentColor" />
+        <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="12" y1="1.6" x2="12" y2="4.4" />
+          <line x1="12" y1="19.6" x2="12" y2="22.4" />
+          <line x1="1.6" y1="12" x2="4.4" y2="12" />
+          <line x1="19.6" y1="12" x2="22.4" y2="12" />
+          <line x1="4.6" y1="4.6" x2="6.6" y2="6.6" />
+          <line x1="17.4" y1="17.4" x2="19.4" y2="19.4" />
+          <line x1="4.6" y1="19.4" x2="6.6" y2="17.4" />
+          <line x1="17.4" y1="6.6" x2="19.4" y2="4.6" />
+        </g>
+      </svg>
+      <span>{{ i18n.t('boardTitle') }}</span>
+    </h1>
 
     <div class="regions__extremes" role="group" [attr.aria-label]="i18n.t('boardTitle')">
       @if (extremes().hottest; as hot) {
