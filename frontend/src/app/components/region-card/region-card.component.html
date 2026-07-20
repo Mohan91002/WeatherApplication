@@ -36,9 +36,6 @@
     <div class="stn__names">
       <p class="stn__country">{{ region().country }}</p>
       <p class="stn__capital">{{ region().capital }}</p>
-      @if (region().officialLanguage) {
-        <p class="stn__lang" title="Official language">🗣 {{ region().officialLanguage }}</p>
-      }
     </div>
   </div>
 
@@ -60,6 +57,10 @@
     <span class="stn__glyph">{{ hasReading() ? icon() : '·' }}</span>
     <span class="stn__conditions">{{ region().summary }}</span>
   </div>
+
+  @if (region().officialLanguage) {
+    <p class="stn__lang" title="Official language">🗣 {{ region().officialLanguage }}</p>
+  }
 
   <dl class="stn__readouts">
     <div class="stn__row">
