@@ -11,7 +11,7 @@ import {
 } from '../../shared/weather-visuals';
 
 /**
- * One country plotted as a synoptic station model: a station tag and
+ * One country plotted as a station model: a station tag and
  * coordinates, a sky-cover disc, and monospace TEMP / AIR / FX readouts.
  * Lazily loaded via @defer.
  */

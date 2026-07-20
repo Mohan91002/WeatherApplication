@@ -105,7 +105,7 @@ export function temperatureColor(temperatureC: number): string {
 
 /**
  * Fraction of sky covered by cloud (0 = clear, 1 = overcast), derived from the
- * WMO weather code — the shaded fraction of a synoptic station-model circle.
+ * WMO weather code — the shaded fraction of a station-model circle.
  *
  * @param code the WMO weather code (-1 when unknown)
  * @returns a value from 0 to 1

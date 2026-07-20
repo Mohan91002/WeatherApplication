@@ -1,7 +1,7 @@
-# Synoptic — World Weather Board
+# World Weather
 
 A full-stack weather dashboard that plots **253 countries and territories** as
-live "synoptic stations" — each showing local time, temperature, sky conditions,
+live weather stations — each showing local time, temperature, sky conditions,
 air quality, and a live currency exchange rate — over an **interactive world-map
 backdrop** that pans and zooms to whichever station you hover.
 
