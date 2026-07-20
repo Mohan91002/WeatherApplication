@@ -1,0 +1,40 @@
+<section class="outlook">
+  <header class="outlook__head">
+    <div>
+      <p class="outlook__eyebrow">{{ i18n.t('outlookEyebrow') }}</p>
+      <h2 class="outlook__title">{{ i18n.t('outlookTitle') }}</h2>
+    </div>
+    <button
+      type="button"
+      class="outlook__refresh"
+      (click)="loadForecast()"
+      [disabled]="loading()"
+    >
+      {{ loading() ? i18n.t('refreshing') : '↻ ' + i18n.t('refresh') }}
+    </button>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="outlook__error">{{ i18n.t('forecastError') }}</p>
+  }
+
+  @if (loading()) {
+    <p class="outlook__status">◐ {{ i18n.t('fetchingForecast') }}</p>
+  }
+
+  <div class="outlook__grid">
+    @for (forecast of forecasts(); track forecast.date) {
+      <article class="tile">
+        <span class="tile__strip" [style.background]="gradientFor(forecast.temperatureC)"></span>
+        <p class="tile__day">
+          {{ forecast.date | date: 'EEE' }}
+          <span class="tile__date">{{ forecast.date | date: 'MMM d' }}</span>
+        </p>
+        <span class="tile__glyph">{{ iconFor(forecast.summary) }}</span>
+        <p class="tile__temp">{{ forecast.temperatureC }}<span class="tile__unit">°C</span></p>
+        <p class="tile__temp-f">{{ forecast.temperatureF }}°F</p>
+        <p class="tile__summary">{{ i18n.wx(forecast.summary) }}</p>
+      </article>
+    }
+  </div>
+</section>

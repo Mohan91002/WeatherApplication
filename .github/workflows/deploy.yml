@@ -1,0 +1,102 @@
+name: build-test-deploy
+
+# Deploys the .NET API (container → ECR → App Runner) and the Angular SPA
+# (S3 + CloudFront). Uses GitHub OIDC to assume an AWS role — no static keys.
+#
+# Required repo secrets/vars:
+#   vars.AWS_REGION            e.g. us-east-1
+#   secrets.AWS_ROLE_ARN       IAM role GitHub OIDC assumes (deploy permissions)
+#   vars.ECR_REPOSITORY        e.g. weatherapplication-api
+#   vars.APPRUNNER_SERVICE_ARN App Runner service ARN
+#   vars.SPA_BUCKET            S3 bucket for the SPA
+#   vars.CLOUDFRONT_ID         CloudFront distribution id
+#   vars.API_BASE_URL          public API URL baked into the SPA (optional)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # for AWS OIDC
+  contents: read
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet test Tests/WeatherApplication.Tests.csproj -c Release --nologo
+
+  frontend-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: corepack enable
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+      # karma.conf.js already defines a hardened headless Chrome launcher.
+      - run: node_modules/.bin/ng test --watch=false
+
+  deploy:
+    needs: [backend-test, frontend-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      # --- API: build image, push to ECR, trigger App Runner deploy ---
+      - name: Login to ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build & push API image
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+          REPO: ${{ vars.ECR_REPOSITORY }}
+        run: |
+          IMAGE="$REGISTRY/$REPO:${{ github.sha }}"
+          docker build -t "$IMAGE" -t "$REGISTRY/$REPO:latest" .
+          docker push "$IMAGE"
+          docker push "$REGISTRY/$REPO:latest"
+
+      - name: Deploy API to App Runner
+        run: aws apprunner start-deployment --service-arn ${{ vars.APPRUNNER_SERVICE_ARN }}
+
+      # --- SPA: build Angular, sync to S3, invalidate CloudFront ---
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Build SPA
+        working-directory: frontend
+        run: |
+          corepack enable
+          yarn install --frozen-lockfile
+          # Inject the public API URL (empty = same-origin) into the prod env file.
+          sed -i "s|__API_BASE_URL__|${{ vars.API_BASE_URL }}|g" src/environments/environment.production.ts
+          yarn build
+
+      - name: Sync SPA to S3
+        run: |
+          aws s3 sync frontend/dist/weather-frontend/browser s3://${{ vars.SPA_BUCKET }} \
+            --delete --cache-control "public,max-age=31536000,immutable" \
+            --exclude index.html
+          aws s3 cp frontend/dist/weather-frontend/browser/index.html s3://${{ vars.SPA_BUCKET }}/index.html \
+            --cache-control "no-cache"
+
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_ID }} --paths "/*"

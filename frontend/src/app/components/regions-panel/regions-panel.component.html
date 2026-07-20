@@ -1,0 +1,141 @@
+<section class="regions">
+  <header class="regions__head">
+    <div class="regions__topbar">
+      <p class="regions__eyebrow">
+        <span class="regions__live">● {{ i18n.t('live') }}</span>
+        {{ i18n.t('stationsReporting', { n: totalCountries() }) }}
+      </p>
+      <label class="regions__lang">
+        <span class="regions__lang-icon" aria-hidden="true">🌐</span>
+        <select
+          class="regions__lang-select"
+          [value]="i18n.lang()"
+          (change)="onLanguageChange($any($event.target).value)"
+          [attr.aria-label]="i18n.t('language')"
+        >
+          @for (l of i18n.languages; track l) {
+            <option [value]="l">{{ i18n.names[l] }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <h1 class="regions__title">{{ i18n.t('boardTitle') }}</h1>
+
+    <div class="regions__extremes" role="group" [attr.aria-label]="i18n.t('boardTitle')">
+      @if (extremes().hottest; as hot) {
+        <span class="ex ex--hot">
+          <span class="ex__k">{{ i18n.t('warmest') }}</span>
+          <span class="ex__v">{{ hot.temperatureC }}°C</span>
+          <span class="ex__w">{{ hot.capital }}</span>
+        </span>
+      }
+      @if (extremes().coldest; as cold) {
+        <span class="ex ex--cold">
+          <span class="ex__k">{{ i18n.t('coldest') }}</span>
+          <span class="ex__v">{{ cold.temperatureC }}°C</span>
+          <span class="ex__w">{{ cold.capital }}</span>
+        </span>
+      }
+      @if (extremes().worstAir; as air) {
+        <span class="ex ex--air">
+          <span class="ex__k">{{ i18n.t('worstAir') }}</span>
+          <span class="ex__v">{{ i18n.t('aqi') }} {{ air.aqi }}</span>
+          <span class="ex__w">{{ air.capital }}</span>
+        </span>
+      }
+    </div>
+  </header>
+
+  <div class="regions__controls">
+    <div class="regions__sort" role="group" [attr.aria-label]="i18n.t('sort')">
+      <span class="regions__sort-label">{{ i18n.t('sort') }}</span>
+      <button
+        type="button"
+        class="regions__sort-btn"
+        [class.regions__sort-btn--active]="sortField() === 'country'"
+        (click)="setSort('country')"
+      >
+        {{ i18n.t('country') }}
+      </button>
+      <button
+        type="button"
+        class="regions__sort-btn"
+        [class.regions__sort-btn--active]="sortField() === 'capital'"
+        (click)="setSort('capital')"
+      >
+        {{ i18n.t('capital') }}
+      </button>
+      <button
+        type="button"
+        class="regions__sort-btn"
+        [class.regions__sort-btn--active]="sortField() === 'aqi'"
+        (click)="setSort('aqi')"
+      >
+        {{ i18n.t('aqi') }}
+      </button>
+      <button
+        type="button"
+        class="regions__sort-btn"
+        [class.regions__sort-btn--active]="sortField() === 'year'"
+        (click)="setSort('year')"
+      >
+        {{ i18n.t('year') }}
+      </button>
+    </div>
+
+    <div class="regions__search">
+      <label class="regions__search-label" for="stationSearch">{{ i18n.t('find') }}</label>
+      <input
+        #searchInput
+        id="stationSearch"
+        type="search"
+        class="regions__search-input"
+        [placeholder]="i18n.t('searchPlaceholder')"
+        [value]="searchQuery()"
+        (input)="onSearch(searchInput.value)"
+        [attr.aria-label]="i18n.t('find')"
+      />
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <p class="regions__error">{{ i18n.t('loadError') }}</p>
+  } @else if (loading() && total() === 0) {
+    <p class="regions__status">◐ {{ i18n.t('loading') }}</p>
+  }
+
+  <div class="regions__grid">
+    @for (region of visibleRegions(); track region.country) {
+      <app-region-card
+        [region]="region"
+        [favorite]="isFavorite(region.country)"
+        [pinned]="isPinned(region.country)"
+        [now]="now()"
+        (favoriteToggle)="toggleFavorite($event)"
+      />
+    }
+  </div>
+
+  <div class="regions__sentinel">
+    @if (total() > 0) {
+      @if (allLoaded()) {
+        <span>✓ {{ i18n.t('allPlotted', { n: total() }) }}</span>
+      } @else {
+        <span class="regions__count">{{ i18n.t('showing', { v: visibleCount(), t: total() }) }}</span>
+      }
+    }
+  </div>
+
+  @if (!allLoaded()) {
+    <button
+      type="button"
+      class="regions__scroll-fab"
+      (click)="loadMore()"
+      [attr.aria-label]="i18n.t('showing', { v: visibleCount(), t: total() })"
+      title="+5"
+    >
+      <span class="regions__scroll-fab-arrow">↓</span>
+    </button>
+  }
+</section>

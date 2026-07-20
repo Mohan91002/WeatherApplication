@@ -1,0 +1,16 @@
+@WeatherApplication_HostAddress = http://localhost:5135
+
+GET {{WeatherApplication_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{WeatherApplication_HostAddress}}/api/countries
+Accept: application/json
+
+###
+
+GET {{WeatherApplication_HostAddress}}/api/regions
+Accept: application/json
+
+###

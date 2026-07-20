@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dotnet-api",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "WeatherApplication.csproj", "--launch-profile", "http"],
+      "port": 5135
+    },
+    {
+      "name": "angular-dev",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["frontend/dev-serve.mjs"],
+      "port": 4200
+    }
+  ]
+}

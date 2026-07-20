@@ -1,0 +1,7 @@
+# Never commit real values or state.
+terraform.tfvars
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log

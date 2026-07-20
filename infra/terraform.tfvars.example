@@ -1,0 +1,24 @@
+# Copy to terraform.tfvars and fill in your values, then:
+#   terraform init && terraform apply
+# (terraform.tfvars is gitignored — never commit real values.)
+
+# --- Required ---
+project    = "weatherapplication"
+aws_region = "us-east-1"
+
+# Public origin of the deployed SPA, used for the API CORS allow-list.
+# Use your CloudFront domain (or custom domain) once known. For a first apply
+# you can leave the localhost default and re-apply after CloudFront exists.
+spa_origin = "https://REPLACE_WITH_CLOUDFRONT_OR_CUSTOM_DOMAIN"
+
+# --- Optional: custom domain for the SPA (leave empty to use *.cloudfront.net) ---
+domain_name    = ""            # e.g. "weather.example.com"
+hosted_zone_id = ""            # e.g. "Z0123456789ABCDEFGHIJ" (Route 53 zone for the domain)
+
+# --- Optional: API sizing ---
+api_cpu    = "1024"            # 1 vCPU  (512 = 0.5 vCPU for a cheaper footprint)
+api_memory = "2048"            # 2 GB
+
+# --- Optional: monitoring ---
+alarm_email              = ""  # e.g. "oncall@example.com" (confirm the SNS subscription email)
+latency_p95_threshold_ms = 1500
