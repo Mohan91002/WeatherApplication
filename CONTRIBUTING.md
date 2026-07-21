@@ -20,6 +20,10 @@ Name branches by type + short kebab description:
 | `docs/`    | documentation only | `docs/api-examples` |
 | `chore/`   | tooling, deps, refactors | `chore/bump-angular` |
 
+> Working from the Jira backlog? Name branches after the issue key —
+> `feature/WEA-<id>-<slug>` — and put the key in the commit subject (e.g.
+> `WEA-113: ...`). See [WORKFLOW.md](WORKFLOW.md) for the issue → branch → PR map.
+
 ## 2. Develop & test locally
 
 See [README → Getting started](README.md#getting-started) to run the apps. Run

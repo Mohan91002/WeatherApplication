@@ -78,6 +78,7 @@ WeatherApplication/
 ├── PROJECT_PLAN.md           # scope, estimates, cost
 ├── PROMPTS.md
 ├── CONTRIBUTING.md           # branch/PR workflow
+├── WORKFLOW.md               # Jira <-> git: issue -> branch -> PR mapping
 └── .github/workflows/deploy.yml   # CI/CD (must live at repo root)
 ```
 
@@ -161,6 +162,7 @@ vendor-neutral (Docker Compose / Kubernetes) deployment.
 | [cloud/AWS_ARCHITECTURE.md](cloud/AWS_ARCHITECTURE.md) | AWS production topology + diagram |
 | [cloud/DEPLOY.md](cloud/DEPLOY.md) | Deployment runbook + go-live checklist |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Branching / PR workflow |
+| [WORKFLOW.md](WORKFLOW.md) | Jira ↔ git: issue → branch → PR lifecycle + story→branch map |
 | [PROJECT_PLAN.md](PROJECT_PLAN.md) | Scope, estimates, cost |
 
 ---
