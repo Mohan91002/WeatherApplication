@@ -39,8 +39,3 @@ crash.log
 .idea/
 .DS_Store
 Thumbs.db
-
-# ---------------------------------------------------------------------------
-# Editor/tooling config: share launch.json, keep local machine settings out
-# ---------------------------------------------------------------------------
-.claude/settings.local.json

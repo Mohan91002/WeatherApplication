@@ -120,6 +120,8 @@ summary condensed repeated phrasing. Recorded live, as typed, from here on.
 
 52. make the repo public
 
+53. in local and reote please delete or remove word clude word and claude folder also if it not making any issue or error
+
 ### Menu selections this session (not typed)
 - Jira ticket creation: **CSV import**
 - Git feature-branch structure: **All 27 story branches**

@@ -19,8 +19,7 @@ and the **Angular 18 SPA** (frontend). Extracted from `backend/WeatherApplicatio
 
 > **Environment quirk:** `yarn`/global `ng` are not on `PATH`. The repo works
 > around this with [`frontend/dev-serve.mjs`](frontend/dev-serve.mjs), which spawns
-> the local Angular CLI directly through `node`. The preview launcher
-> [`.claude/launch.json`](.claude/launch.json) uses it (`angular-dev` config).
+> the local Angular CLI directly through `node`.
 
 ---
 
