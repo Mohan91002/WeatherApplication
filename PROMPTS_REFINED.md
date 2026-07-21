@@ -23,9 +23,7 @@ the 7-day outlook) are intentionally left out.
 
 ## Interactive world map
 
-- Add an interactive world-map backdrop that pans and zooms to the hovered country's region.
-- Draw each country's borders and tint the hovered country with colours sampled from its flag.
-- Keep the hovered country in view — rotate or pan the map when it would otherwise fall off-screen.
+- Add an interactive world-map backdrop (equirectangular land outline) that pans and zooms to the hovered country's region — anchoring it in the open area above the cards, and holding a centred world view when nothing is hovered.
 
 ## Quality & structure
 
