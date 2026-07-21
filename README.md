@@ -9,6 +9,9 @@ It is built as a deliberate full-stack reference with one strict architectural
 rule: **all business logic lives in the .NET backend; the Angular frontend is
 presentation-only.**
 
+**🌐 Live demo:** <https://mohan91002.github.io/WeatherApplication/> — the SPA on
+GitHub Pages. (Live weather needs the API deployed too — see [Deployment](#deployment).)
+
 ---
 
 ## What it does
@@ -149,6 +152,10 @@ assets (**S3 + CloudFront**). Build the image from the repo root:
 ```bash
 docker build -f cloud/Dockerfile -t weatherapplication-api backend/
 ```
+
+**Free-host path (used by the live demo):** the SPA is published to **GitHub Pages**
+via [`.github/workflows/pages.yml`](.github/workflows/pages.yml) and the API runs on
+**Fly.io** ([`backend/fly.toml`](backend/fly.toml)) — steps in [cloud/DEPLOY.md](cloud/DEPLOY.md).
 
 See [cloud/DEPLOY.md](cloud/DEPLOY.md) and [cloud/AWS_ARCHITECTURE.md](cloud/AWS_ARCHITECTURE.md)
 for the full runbook and topology, or [ARCHITECTURE.md](ARCHITECTURE.md) for a

@@ -3,6 +3,39 @@
 Deploys the **.NET API** (container → ECR → App Runner) and the **Angular SPA**
 (S3 + CloudFront). See [PROJECT_PLAN.md](../PROJECT_PLAN.md) for cost/estimates.
 
+> **Two paths:** the AWS runbook below, or the **free-host path** (Fly.io + GitHub
+> Pages) just under here — the latter is what the live demo uses.
+
+## Free-host deploy (Fly.io + GitHub Pages)
+
+Zero-cost hosting: the SPA on **GitHub Pages** (built and published by
+[`.github/workflows/pages.yml`](../.github/workflows/pages.yml)) and the API on
+**Fly.io** (config in [`backend/fly.toml`](../backend/fly.toml)).
+
+**SPA (already automated).** Each push to `main` touching `frontend/` builds the
+Angular app with base-href `/WeatherApplication/` and publishes it to
+`https://<user>.github.io/WeatherApplication/`. Enable once: **Settings → Pages →
+Source: GitHub Actions**.
+
+**API on Fly.io** — from your machine, using the free `flyctl`:
+```powershell
+iwr https://fly.io/install.ps1 -useb | iex     # install flyctl
+fly auth login                                  # free sign-up / sign-in
+cd backend
+fly launch --no-deploy --copy-config --name <your-unique-app>   # first time
+fly deploy                                      # builds cloud/Dockerfile → https://<app>.fly.dev
+```
+
+**Wire them together:**
+1. Add repo variable `API_BASE_URL = https://<app>.fly.dev`
+   (**Settings → Secrets and variables → Actions → Variables**).
+2. Re-run **Actions → deploy-spa-pages** so the SPA is rebuilt pointing at the API.
+3. CORS is preset in `fly.toml` (`Cors__AllowedOrigins__0`); if your Pages origin
+   differs, update it and `fly deploy` again.
+
+Fly's free tier auto-stops idle machines (`min_machines_running = 0`), so the first
+request after a lull has a brief cold start.
+
 ## Files
 | File | Purpose |
 | ---- | ------- |
