@@ -130,7 +130,7 @@ Ceremonies + backlog grooming (5 pts) run across all four sprints — **27 stori
 
 ### 4.4 Jira ticket breakdown (≈ 134 issues total)
 
-Importable backlog: [`cloud/deploy/jira-backlog.csv`](cloud/deploy/jira-backlog.csv)
+Importable backlog: [`jira-backlog.csv`](jira-backlog.csv)
 — Epics + Stories + Sub‑tasks + Spikes with Sprint, Story Points and parent links.
 
 | Type | Count |

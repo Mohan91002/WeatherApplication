@@ -70,7 +70,7 @@ WeatherApplication/
 ├── cloud/                    # deployment & infrastructure
 │   ├── Dockerfile                 # API container (multi-stage, non-root; build context = backend/)
 │   ├── infra/                     # Terraform: ECR, App Runner, S3, CloudFront, Route 53, ACM, CloudWatch
-│   ├── deploy/                    # CI/CD setup notes + importable Jira backlog
+│   ├── deploy/                    # CI/CD setup notes (GitHub Actions)
 │   ├── AWS_ARCHITECTURE.md        # AWS production topology (+ Mermaid diagram)
 │   └── DEPLOY.md                  # deployment runbook + go-live checklist
 ├── ARCHITECTURE.md           # vendor-neutral architecture (proxy + containers) + Mermaid diagram
@@ -80,6 +80,7 @@ WeatherApplication/
 ├── PROMPTS.md
 ├── CONTRIBUTING.md           # branch/PR workflow
 ├── WORKFLOW.md               # Jira <-> git: issue -> branch -> PR mapping
+├── jira-backlog.csv          # importable Jira backlog (6 epics / 27 stories / 78 sub-tasks)
 └── .github/workflows/deploy.yml   # CI/CD (must live at repo root)
 ```
 

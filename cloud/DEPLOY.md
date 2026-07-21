@@ -9,7 +9,7 @@ Deploys the **.NET API** (container → ECR → App Runner) and the **Angular SP
 | `Dockerfile`, `backend/.dockerignore` | Build the API container (non-root, port 8080; context `backend/`) |
 | `infra/*.tf` | Terraform: ECR, App Runner, S3, CloudFront, Route 53, ACM, CloudWatch |
 | `../.github/workflows/deploy.yml` | CI/CD: test → build/push image → deploy API → sync SPA |
-| `deploy/jira-backlog.csv` | Importable backlog (Jira: **System → External System Import → CSV**) |
+| `../jira-backlog.csv` | Importable backlog (Jira: **System → External System Import → CSV**) |
 
 ## One-time setup
 1. **Terraform provision** (creates ECR before the API can deploy):

@@ -11,7 +11,7 @@ branching, testing, PRs and deploys, see [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Jira project
 
 - **Project key:** `WEA` (WeatherApplication)
-- **Backlog:** [cloud/deploy/jira-backlog.csv](cloud/deploy/jira-backlog.csv) —
+- **Backlog:** [jira-backlog.csv](jira-backlog.csv) —
   import via *Jira → System → External System Import → CSV*, mapping
   `Epic Link` (Story→Epic), `Parent Id` (Sub-task→Story) and `Sprint`.
 - **Hierarchy:** **6 Epics → 27 Stories → 78 Sub-tasks**, plus **5 Spikes**;
