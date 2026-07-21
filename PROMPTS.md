@@ -57,3 +57,25 @@ Two long messages (#10, #11, #14) contained repeated phrases in the original.
 - Time zone display: **Abbreviation + offset** (e.g. "IST · UTC+5:30")
 - Open-Meteo integration: **.NET proxy + browser fallback**
 - Last-step change: **Revert** (per-country borders + flag-colour fill)
+
+## Follow-up session — refinement, docs, Jira & git workflow
+
+Prompts 25–28 are backfilled from the current context. Earlier follow-up prompts
+(repo restructure, scroll-icon/search-icon, "World Weather" title, i18n & outlook
+removal, doc cleanup) were part of a compacted session — ask to backfill them
+verbatim from the session summary. Prompt 29 onward is recorded live, as typed.
+
+25. update those two docs also please please remove outlook things and outlook section from front end and backend relavant test cases and remove claude word where ever you find.
+
+26. understand the project structure give me like sprint wise and how many tickets wwe can create how many epics how many stories  wise please create in jira give
+
+27. please go ahead
+
+28. could please create tickets for jira for existing and simlilar way try to create git structure in feature things also howw real project works
+
+29. for this session please keep when ever i type prompt please keep that prompt in prompts file automatically
+
+### Menu selections this session (not typed)
+- Jira ticket creation: **CSV import**
+- Git feature-branch structure: **All 27 story branches**
+
