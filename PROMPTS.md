@@ -58,22 +58,57 @@ Two long messages (#10, #11, #14) contained repeated phrases in the original.
 - Open-Meteo integration: **.NET proxy + browser fallback**
 - Last-step change: **Revert** (per-country borders + flag-colour fill)
 
-## Follow-up session — refinement, docs, Jira & git workflow
+## Follow-up session — restructure, refinement, docs, Jira & git workflow
 
-Prompts 25–28 are backfilled from the current context. Earlier follow-up prompts
-(repo restructure, scroll-icon/search-icon, "World Weather" title, i18n & outlook
-removal, doc cleanup) were part of a compacted session — ask to backfill them
-verbatim from the session summary. Prompt 29 onward is recorded live, as typed.
+Backfilled in order from the session summary (25–41) and live context (42+). The
+longest prompts may differ slightly from the exact original wording where the
+summary condensed repeated phrasing. Recorded live, as typed, from here on.
 
-25. update those two docs also please please remove outlook things and outlook section from front end and backend relavant test cases and remove claude word where ever you find.
+25. Run this
 
-26. understand the project structure give me like sprint wise and how many tickets wwe can create how many epics how many stories  wise please create in jira give
+26. yes please stop and proccedd this what are the requirement things need for frontend and backened dependencides please extract and run and run what are the errors your getting pleaae rectify self and auto create architecture without involving aws and also create aws archictutre also
 
-27. please go ahead
+27. set up a feature-branch workflow? please go ahead. please read every file in this structure please push which ever file belongs to frontend push to frontend folder which ever file belongs to backend send to backend folder if not created please create the folder and push the files into it similar way send all cloud related into cloud folder remaining leave as it is while pushing based on that if changes required for running the code please change give me good project structure. in readme file please keep everything relavant to project description skil languages
 
-28. could please create tickets for jira for existing and simlilar way try to create git structure in feature things also howw real project works
+28. merge it into main re-launch the app end-to-end from the new structure to confirm the full stack still runs please go head
 
-29. for this session please keep when ever i type prompt please keep that prompt in prompts file automatically
+29. stop the servers and delete the merged feature branch please remove scroll icon
+
+30. instead of word find use search icon
+
+31. please make 7 day outlook start from Wednesday remaining time please hide navigator icon on map
+
+32. run
+
+33. based on missing test cases for front end and backend please
+
+34. please change the title as World Weather and keep weather logo in title
+
+35. please go ahead
+
+36. clean up the docs and dead css
+
+37. please change outlook position in top right how muh space is remain according to change everything
+
+38. please go back one step
+
+39. check everything and close the servers checking means proper strucyture or not test caess and remaining things
+
+40. stop
+
+41. check every file if any thing miss please keep up to date.
+
+42. update those two docs also please please remove outlook things and outlook section from front end and backend relavant test cases and remove claude word where ever you find.
+
+43. understand the project structure give me like sprint wise and how many tickets wwe can create how many epics how many stories  wise please create in jira give
+
+44. please go ahead
+
+45. could please create tickets for jira for existing and simlilar way try to create git structure in feature things also howw real project works
+
+46. for this session please keep when ever i type prompt please keep that prompt in prompts file automatically
+
+47. yes backfill the earlier gap now
 
 ### Menu selections this session (not typed)
 - Jira ticket creation: **CSV import**
