@@ -114,6 +114,8 @@ summary condensed repeated phrasing. Recorded live, as typed, from here on.
 
 49. add the mermaid cost-flow diagram
 
+50. commit and push everything to a remote
+
 ### Menu selections this session (not typed)
 - Jira ticket creation: **CSV import**
 - Git feature-branch structure: **All 27 story branches**
