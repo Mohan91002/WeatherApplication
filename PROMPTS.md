@@ -127,6 +127,8 @@ summary condensed repeated phrasing. Recorded live, as typed, from here on.
 
 55. some changes done local please push this into remote
 
+56. keep it in root that's fine and run
+
 ### Menu selections this session (not typed)
 - Jira ticket creation: **CSV import**
 - Git feature-branch structure: **All 27 story branches**
