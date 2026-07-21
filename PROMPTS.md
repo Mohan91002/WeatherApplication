@@ -116,6 +116,8 @@ summary condensed repeated phrasing. Recorded live, as typed, from here on.
 
 50. commit and push everything to a remote
 
+51. https://github.com/Mohan91002 in this create a repo name as WeatherApplication and push everything in that Repo
+
 ### Menu selections this session (not typed)
 - Jira ticket creation: **CSV import**
 - Git feature-branch structure: **All 27 story branches**
