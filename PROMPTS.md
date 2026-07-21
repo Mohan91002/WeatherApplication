@@ -110,6 +110,8 @@ summary condensed repeated phrasing. Recorded live, as typed, from here on.
 
 47. yes backfill the earlier gap now
 
+48. give me cost optimataion things also end to end to create this project
+
 ### Menu selections this session (not typed)
 - Jira ticket creation: **CSV import**
 - Git feature-branch structure: **All 27 story branches**
