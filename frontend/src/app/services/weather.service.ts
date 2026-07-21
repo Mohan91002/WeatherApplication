@@ -51,7 +51,7 @@ interface WeatherCache {
 }
 
 /**
- * Talks to the .NET API for everything: the 5-day forecast and the live
+ * Talks to the .NET API for everything: the 7-day forecast and the live
  * weather + air quality for every country.
  *
  * All business logic — the country dataset, the Open-Meteo integration, the
@@ -82,7 +82,7 @@ export class WeatherService {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * Fetches the 5-day forecast from the backend.
+   * Fetches the 7-day forecast from the backend.
    */
   getForecast(): Observable<WeatherForecast[]> {
     return this.http.get<WeatherForecast[]>(WeatherService.FORECAST_URL);

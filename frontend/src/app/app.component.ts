@@ -5,7 +5,7 @@ import { WorldMapComponent } from './components/world-map/world-map.component';
 
 /**
  * Root component: an interactive world-map backdrop behind the weather board,
- * with the 5-day outlook lazily loaded when scrolled into view.
+ * with the 7-day outlook lazily loaded on idle.
  */
 @Component({
   selector: 'app-root',
@@ -18,7 +18,7 @@ import { WorldMapComponent } from './components/world-map/world-map.component';
     @defer (on idle) {
       <app-weather-dashboard></app-weather-dashboard>
     } @placeholder {
-      <p class="lazy-placeholder">▾ loading 5-day outlook…</p>
+      <p class="lazy-placeholder">▾ loading 7-day outlook…</p>
     } @loading {
       <p class="lazy-placeholder">loading outlook…</p>
     }
