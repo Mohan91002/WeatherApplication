@@ -119,28 +119,34 @@ optional ElastiCache for shared cache when running >1 instance.
 - **Velocity:** ~90 productive dev‑hours/sprint (small team).
 - **Duration:** ≈ **4 sprints (~8 weeks / 2 months)** to production.
 
-| Sprint | Focus |
-| ------ | ----- |
-| Sprint 1 | E1 backend API + E3 frontend scaffold/design tokens |
-| Sprint 2 | E2 currency/year + E3 cards, panel |
-| Sprint 3 | E3 interactive map + responsive polish |
-| Sprint 4 | E4 testing/QA + E5 deploy + hardening + go‑live |
+| Sprint | Focus | Stories | Points |
+| ------ | ----- | :-----: | :----: |
+| Sprint 1 | Backend core (API, dataset, classifier, Open-Meteo, relay) + Angular scaffold + UX design | 7 | 35 |
+| Sprint 2 | Data enrichment (FX, currency, year, language) + design system, station card, regions panel | 7 | 31 |
+| Sprint 3 | Interactive map, infinite scroll, responsive + backend/frontend tests + Dockerize + CORS config | 7 | 32 |
+| Sprint 4 | CI/CD, AWS Terraform, observability + manual QA/a11y + hardening buffer | 5 | 34 |
 
-### 4.4 Jira ticket breakdown (≈ 150 issues total)
+Ceremonies + backlog grooming (5 pts) run across all four sprints — **27 stories / 137 points** total.
+
+### 4.4 Jira ticket breakdown (≈ 134 issues total)
+
+Importable backlog: [`cloud/deploy/jira-backlog.csv`](cloud/deploy/jira-backlog.csv)
+— Epics + Stories + Sub‑tasks + Spikes with Sprint, Story Points and parent links.
 
 | Type | Count |
 | ---- | ----- |
 | Epics | 6 |
-| Stories | ~30 |
-| Sub‑tasks | ~90 |
-| Spikes | ~5 |
+| Stories | 27 |
+| Sub‑tasks | 78 |
+| Spikes | 5 |
 | Bugs (expected) | ~15–20 |
+| **Total (pre‑created)** | **116** |
 
 Sample epic → story map:
 
-- **E3 Frontend** → stories: design tokens, station card, regions panel,
-  sort/search, favourites, infinite scroll + unload, world map,
-  responsive → each 2–4 sub‑tasks (component, styles, spec, review).
+- **FRONTEND** → stories: design system, station card, regions panel,
+  sort/search/favourites, infinite scroll + unload, world map,
+  timezone + responsive grid → each 2–4 sub‑tasks (component, styles, spec, review).
 
 ### 4.5 Cost (build)
 
@@ -279,7 +285,7 @@ to the SPA origin · rate‑limit/WAF · rollback plan · Lighthouse/a11y pass.
 | Effort (traditional) | **~368 person‑hours** |
 | Team | **~3.5–4 FTE** (BE, FE, QA, DevOps, UX, PO/SM) |
 | Sprints | **4 × 2‑week (~2 months)** |
-| Jira issues | **~150** (6 epics, ~30 stories, ~90 sub‑tasks, ~20 bugs, ~5 spikes) |
+| Jira issues | **~134** (6 epics, 27 stories, 78 sub‑tasks, ~18 bugs, 5 spikes) |
 | Build cost | **~$20k–$60k** (rate‑dependent) |
 | AI prompts | **~15 feature prompts** in one session |
 | AI build cost | **~$20–$80** LLM usage + reviewer time |

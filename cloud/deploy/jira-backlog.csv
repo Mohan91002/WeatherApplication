@@ -1,34 +1,117 @@
-Issue Type,Summary,Epic Name,Epic Link,Story Points,Priority,Labels,Description
-Epic,Backend API foundation,BACKEND,,,High,backend,".NET 10 minimal API, endpoints, weather + air-quality integration, caching"
-Epic,Currency and founding-year data,DATA,,,Medium,backend;data,"Live FX rates, currency + established-year + official-language enrichment"
-Epic,Frontend UI and interactive map,FRONTEND,,,High,frontend,"Angular 18 SPA, station cards, interactive world map"
-Epic,Testing and QA,QA,,,High,qa,"Unit, integration, component tests + manual QA/a11y"
-Epic,DevOps and AWS deployment,DEVOPS,,,High,devops,"Containerize, CI/CD, AWS infra, monitoring"
-Epic,Project management and UX,PMUX,,,Medium,pm;ux,"Ceremonies, backlog, UX design, buffer"
-Story,Scaffold .NET 10 minimal API + CORS + OpenAPI,,BACKEND,3,High,backend,"Project setup, dev-server CORS, OpenAPI"
-Story,Countries dataset served at /api/countries,,BACKEND,5,High,backend;data,"253 countries from mledoze; name/capital/code/flag/coords"
-Story,WeatherClassifier (code to description; AQI; C to F),,BACKEND,3,High,backend,"Pure classification with unit tests"
-Story,Open-Meteo integration (chunk/retry/merge/cache),,BACKEND,8,High,backend,"Live weather + air quality; 1h in-memory cache"
-Story,Browser-relay fallback POST /api/regions/merge,,BACKEND,5,Medium,backend,"Client relays raw upstream data; backend merges"
-Story,Live FX rates service (open.er-api, cached),,DATA,5,Medium,backend,"USD-based rates; graceful failure"
-Story,Enrich dataset with currency (code + symbol),,DATA,3,Medium,data,"From mledoze currencies"
-Story,Enrich dataset with founding year (Wikidata),,DATA,3,Low,data,"SPARQL inception per ISO code"
-Story,Enrich dataset with official language,,DATA,2,Low,data,"Official / national language per ISO code"
-Story,Angular scaffold + weather service + models,,FRONTEND,3,High,frontend,"Standalone app, HttpClient, DTOs"
-Story,Weather-board design system (tokens, type, layout),,FRONTEND,5,Medium,frontend;ux,"Distinctive visual identity"
-Story,Station-model region card,,FRONTEND,8,High,frontend,"Flag, capital, time, language, temp/air/currency, founding year"
-Story,Regions panel: sort/search/favourites,,FRONTEND,5,High,frontend,"Country/capital/AQI/year sort; search; localStorage favourites"
-Story,Infinite scroll with scroll-up unload,,FRONTEND,5,Medium,frontend,"Load 5 near bottom; unload 5 on scroll up"
-Story,Interactive world-map backdrop,,FRONTEND,8,Medium,frontend,"SVG map; pan/zoom to hovered card"
-Story,Timezone label + responsive grid,,FRONTEND,3,Medium,frontend,"IST-style label; 5/3/2/1 columns"
-Story,Backend unit + integration tests (xUnit),,QA,5,High,qa;backend,"Classifier, merge, endpoint tests"
-Story,Frontend component/service specs (Karma),,QA,5,High,qa;frontend,"Weather service, visuals, cards, panel, map"
-Story,Manual QA + cross-browser + accessibility,,QA,8,High,qa,"a11y, Lighthouse, responsive"
-Story,Dockerize API (multi-stage, non-root),,DEVOPS,3,High,devops,"Publish trimmed; forwarded headers; :8080"
-Story,CI/CD pipeline (GitHub Actions + OIDC),,DEVOPS,5,High,devops,"Test, build/push ECR, deploy App Runner, sync S3+CF"
-Story,AWS infra as code (Terraform),,DEVOPS,8,High,devops,"ECR, App Runner, S3, CloudFront OAC, Route53, ACM"
-Story,Observability (health, logs, dashboard, alarms),,DEVOPS,5,Medium,devops,"/health, CloudWatch dashboard + alarms"
-Story,Config-driven CORS + secrets/config,,DEVOPS,3,High,devops;backend,"SPA origin allow-list via config/env"
-Story,Sprint ceremonies + backlog grooming,,PMUX,5,Medium,pm,"Planning, standups, review, retro"
-Story,UX design + prototypes,,PMUX,8,Medium,ux,"Wireframes, visual direction, review"
-Story,Hardening + bug-fix buffer,,PMUX,8,Medium,pm,"Contingency for defects and polish"
+Issue Id,Issue Type,Summary,Epic Name,Epic Link,Parent Id,Story Points,Sprint,Priority,Labels,Description
+1,Epic,Backend API foundation,BACKEND,,,,,High,backend,".NET 10 minimal API, endpoints, weather + air-quality integration, caching"
+2,Epic,Currency and founding-year data,DATA,,,,,Medium,backend;data,"Live FX rates, currency + established-year + official-language enrichment"
+3,Epic,Frontend UI and interactive map,FRONTEND,,,,,High,frontend,"Angular 18 SPA, station cards, interactive world map"
+4,Epic,Testing and QA,QA,,,,,High,qa,"Unit, integration, component tests + manual QA/a11y"
+5,Epic,DevOps and AWS deployment,DEVOPS,,,,,High,devops,"Containerize, CI/CD, AWS infra, monitoring"
+6,Epic,Project management and UX,PMUX,,,,,Medium,pm;ux,"Ceremonies, backlog, UX design, buffer"
+101,Story,Scaffold .NET 10 minimal API + CORS + OpenAPI,,BACKEND,,3,Sprint 1,High,backend,"Project setup, dev-server CORS, OpenAPI, /health"
+1001,Sub-task,Create minimal API project + DI wiring,,,101,,,,,
+1002,Sub-task,Configure CORS for localhost:4200,,,101,,,,,
+1003,Sub-task,Add OpenAPI + /health endpoint,,,101,,,,,
+102,Story,Countries dataset served at /api/countries,,BACKEND,,5,Sprint 1,High,backend;data,253 countries from mledoze; name/capital/code/flag/coords
+1004,Sub-task,ETL script from mledoze/countries,,,102,,,,,
+1005,Sub-task,CountryInfo model + Countries.cs data,,,102,,,,,
+1006,Sub-task,GET /api/countries endpoint + test,,,102,,,,,
+103,Story,WeatherClassifier (code to description; AQI; C to F),,BACKEND,,3,Sprint 1,High,backend,Pure classification with unit tests
+1007,Sub-task,WMO code to description map,,,103,,,,,
+1008,Sub-task,US AQI to category map,,,103,,,,,
+1009,Sub-task,C to F + boundary unit tests,,,103,,,,,
+104,Story,Open-Meteo integration (chunk/retry/merge/cache),,BACKEND,,8,Sprint 1,High,backend,Live weather + air quality; 1h in-memory cache
+1010,Sub-task,Typed HttpClient for Open-Meteo,,,104,,,,,
+1011,Sub-task,Chunk + retry-once fetch,,,104,,,,,
+1012,Sub-task,Merge into RegionWeather,,,104,,,,,
+1013,Sub-task,1h IMemoryCache,,,104,,,,,
+105,Story,Browser-relay fallback POST /api/regions/merge,,BACKEND,,5,Sprint 1,Medium,backend,Client relays raw upstream data; backend merges
+1014,Sub-task,POST /api/regions/merge endpoint,,,105,,,,,
+1015,Sub-task,Relay request contract (forecast/air/rates),,,105,,,,,
+1016,Sub-task,Merge + classification tests,,,105,,,,,
+106,Story,Angular scaffold + weather service + models,,FRONTEND,,3,Sprint 1,High,frontend,"Standalone app, HttpClient, DTOs"
+1017,Sub-task,Standalone app scaffold + config,,,106,,,,,
+1018,Sub-task,WeatherService + region-weather model,,,106,,,,,
+107,Story,UX design + prototypes,,PMUX,,8,Sprint 1,Medium,ux,"Wireframes, visual direction, review"
+1019,Sub-task,Wireframes,,,107,,,,,
+1020,Sub-task,"Visual direction (tokens, type)",,,107,,,,,
+1021,Sub-task,Design review sign-off,,,107,,,,,
+108,Story,"Live FX rates service (open.er-api, cached)",,DATA,,5,Sprint 2,Medium,backend,USD-based rates; graceful failure
+1022,Sub-task,CurrencyRatesService (open.er-api),,,108,,,,,
+1023,Sub-task,Cache + graceful failure,,,108,,,,,
+1024,Sub-task,Include currency + rate in /api/regions,,,108,,,,,
+109,Story,Enrich dataset with currency (code + symbol),,DATA,,3,Sprint 2,Medium,data,From mledoze currencies
+1025,Sub-task,Currency code + symbol from mledoze,,,109,,,,,
+1026,Sub-task,Wire into CountryInfo,,,109,,,,,
+110,Story,Enrich dataset with founding year (Wikidata),,DATA,,3,Sprint 2,Low,data,SPARQL inception per ISO code
+1027,Sub-task,Wikidata SPARQL inception ETL,,,110,,,,,
+1028,Sub-task,Wire established year into dataset,,,110,,,,,
+111,Story,Enrich dataset with official language,,DATA,,2,Sprint 2,Low,data,Official / national language per ISO code
+1029,Sub-task,Code to language lookup table,,,111,,,,,
+1030,Sub-task,Project onto Countries.All,,,111,,,,,
+112,Story,"Weather-board design system (tokens, type, layout)",,FRONTEND,,5,Sprint 2,Medium,frontend;ux,Distinctive visual identity
+1031,Sub-task,Design tokens (colour/space),,,112,,,,,
+1032,Sub-task,Typography pairing,,,112,,,,,
+1033,Sub-task,Layout primitives,,,112,,,,,
+113,Story,Station-model region card,,FRONTEND,,8,Sprint 2,High,frontend,"Flag, capital, time, language, temp/air/currency, founding year"
+1034,Sub-task,Card markup/structure,,,113,,,,,
+1035,Sub-task,Card styles (station-model),,,113,,,,,
+1036,Sub-task,Bind weather/air/currency/language,,,113,,,,,
+1037,Sub-task,Region-card spec,,,113,,,,,
+114,Story,Regions panel: sort/search/favourites,,FRONTEND,,5,Sprint 2,High,frontend,Country/capital/AQI/year sort; search; localStorage favourites
+1038,Sub-task,Sort (country/capital/AQI/year),,,114,,,,,
+1039,Sub-task,Search + India-pinned,,,114,,,,,
+1040,Sub-task,Favourites (localStorage),,,114,,,,,
+115,Story,Infinite scroll with scroll-up unload,,FRONTEND,,5,Sprint 3,Medium,frontend,Load 5 near bottom; unload 5 on scroll up
+1041,Sub-task,Load-more near bottom,,,115,,,,,
+1042,Sub-task,Unload on scroll-up,,,115,,,,,
+1043,Sub-task,Threshold + count display,,,115,,,,,
+116,Story,Interactive world-map backdrop,,FRONTEND,,8,Sprint 3,Medium,frontend,SVG map; pan/zoom to hovered card
+1044,Sub-task,Equirectangular SVG projection,,,116,,,,,
+1045,Sub-task,Pan/zoom to hovered card,,,116,,,,,
+1046,Sub-task,MapFocusService (shared location),,,116,,,,,
+1047,Sub-task,world-map.data + spec,,,116,,,,,
+117,Story,Timezone label + responsive grid,,FRONTEND,,3,Sprint 3,Medium,frontend,IST-style label; 5/3/2/1 columns
+1048,Sub-task,Timezone label (abbr + UTC offset),,,117,,,,,
+1049,Sub-task,Responsive grid 5/3/2/1,,,117,,,,,
+1050,Sub-task,Equal card sizing,,,117,,,,,
+118,Story,Backend unit + integration tests (xUnit),,QA,,5,Sprint 3,High,qa;backend,"Classifier, merge, endpoint tests"
+1051,Sub-task,Classifier + Countries data tests,,,118,,,,,
+1052,Sub-task,RegionWeatherService merge tests,,,118,,,,,
+1053,Sub-task,WebApplicationFactory endpoint tests,,,118,,,,,
+119,Story,Frontend component/service specs (Karma),,QA,,5,Sprint 3,High,qa;frontend,"Weather service, visuals, cards, panel, map"
+1054,Sub-task,WeatherService (primary + fallback),,,119,,,,,
+1055,Sub-task,weather-visuals helpers,,,119,,,,,
+1056,Sub-task,Card + panel + map specs,,,119,,,,,
+120,Story,"Dockerize API (multi-stage, non-root)",,DEVOPS,,3,Sprint 3,High,devops,Publish trimmed; forwarded headers; :8080
+1057,Sub-task,Multi-stage Dockerfile,,,120,,,,,
+1058,Sub-task,Non-root + forwarded headers,,,120,,,,,
+1059,Sub-task,.dockerignore (context=backend/),,,120,,,,,
+121,Story,Config-driven CORS + secrets/config,,DEVOPS,,3,Sprint 3,High,devops;backend,SPA origin allow-list via config/env
+1060,Sub-task,CORS allow-list via config/env,,,121,,,,,
+1061,Sub-task,Secrets/config wiring,,,121,,,,,
+122,Story,CI/CD pipeline (GitHub Actions + OIDC),,DEVOPS,,5,Sprint 4,High,devops,"Test, build/push ECR, deploy App Runner, sync S3+CF"
+1062,Sub-task,Test jobs (backend + frontend),,,122,,,,,
+1063,Sub-task,Build + push image to ECR,,,122,,,,,
+1064,Sub-task,Deploy App Runner + sync S3/CloudFront,,,122,,,,,
+123,Story,AWS infra as code (Terraform),,DEVOPS,,8,Sprint 4,High,devops,"ECR, App Runner, S3, CloudFront OAC, Route53, ACM"
+1065,Sub-task,ECR + App Runner (main.tf),,,123,,,,,
+1066,Sub-task,S3 + CloudFront OAC,,,123,,,,,
+1067,Sub-task,Route53 + ACM,,,123,,,,,
+1068,Sub-task,CloudWatch (monitoring.tf),,,123,,,,,
+124,Story,"Observability (health, logs, dashboard, alarms)",,DEVOPS,,5,Sprint 4,Medium,devops,"/health, CloudWatch dashboard + alarms"
+1069,Sub-task,/health + structured logging,,,124,,,,,
+1070,Sub-task,CloudWatch dashboard,,,124,,,,,
+1071,Sub-task,"Alarms (5xx, latency)",,,124,,,,,
+125,Story,Manual QA + cross-browser + accessibility,,QA,,8,Sprint 4,High,qa,"a11y, Lighthouse, responsive"
+1072,Sub-task,Cross-browser matrix,,,125,,,,,
+1073,Sub-task,"Accessibility (focus, reduced-motion)",,,125,,,,,
+1074,Sub-task,Lighthouse pass,,,125,,,,,
+126,Story,Hardening + bug-fix buffer,,PMUX,,8,Sprint 4,Medium,pm,Contingency for defects and polish
+1075,Sub-task,Defect fixes,,,126,,,,,
+1076,Sub-task,Polish / production hardening,,,126,,,,,
+127,Story,Sprint ceremonies + backlog grooming,,PMUX,,5,Backlog (ongoing),Medium,pm,"Planning, standups, review, retro across all sprints"
+1077,Sub-task,Planning + daily standups,,,127,,,,,
+1078,Sub-task,Review + retro,,,127,,,,,
+201,Task,Spike: Open-Meteo rate limits & relay strategy,,BACKEND,,2,Sprint 1,Medium,spike;backend,Time-boxed investigation
+202,Task,Spike: Official-language data source & coverage,,DATA,,1,Sprint 2,Low,spike;data,Time-boxed investigation
+203,Task,Spike: SVG map projection & pan/zoom approach,,FRONTEND,,2,Sprint 2,Medium,spike;frontend,Time-boxed investigation
+204,Task,Spike: App Runner vs ECS Fargate + ALB,,DEVOPS,,2,Sprint 4,Medium,spike;devops,Time-boxed investigation
+205,Task,Spike: Shared cache for >1 instance (ElastiCache),,DEVOPS,,1,Sprint 4,Low,spike;devops,Time-boxed investigation
