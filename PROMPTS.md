@@ -112,6 +112,8 @@ summary condensed repeated phrasing. Recorded live, as typed, from here on.
 
 48. give me cost optimataion things also end to end to create this project
 
+49. add the mermaid cost-flow diagram
+
 ### Menu selections this session (not typed)
 - Jira ticket creation: **CSV import**
 - Git feature-branch structure: **All 27 story branches**
