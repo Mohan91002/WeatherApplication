@@ -76,6 +76,7 @@ WeatherApplication/
 ├── ARCHITECTURE.md           # vendor-neutral architecture (proxy + containers) + Mermaid diagram
 ├── DEPENDENCIES.md           # full dependency & toolchain inventory
 ├── PROJECT_PLAN.md           # scope, estimates, cost
+├── COST_OPTIMIZATION.md      # end-to-end cost-optimization guide
 ├── PROMPTS.md
 ├── CONTRIBUTING.md           # branch/PR workflow
 ├── WORKFLOW.md               # Jira <-> git: issue -> branch -> PR mapping
@@ -164,6 +165,7 @@ vendor-neutral (Docker Compose / Kubernetes) deployment.
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Branching / PR workflow |
 | [WORKFLOW.md](WORKFLOW.md) | Jira ↔ git: issue → branch → PR lifecycle + story→branch map |
 | [PROJECT_PLAN.md](PROJECT_PLAN.md) | Scope, estimates, cost |
+| [COST_OPTIMIZATION.md](COST_OPTIMIZATION.md) | End-to-end cost-optimization levers (build → run) |
 
 ---
 

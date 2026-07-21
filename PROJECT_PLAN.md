@@ -259,6 +259,9 @@ low.
 
 For a small app, a **CloudWatch dashboard (~$3/mo) + light on‑call** is enough.
 
+> **Cutting costs further?** See [COST_OPTIMIZATION.md](COST_OPTIMIZATION.md) for
+> end-to-end levers — serverless/right-sizing, free tiers, caching, budget guardrails.
+
 ---
 
 ## 8. Go‑live plan (traditional vs AI‑utilized)
