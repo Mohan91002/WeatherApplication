@@ -1,0 +1,55 @@
+name: deploy-spa-pages
+
+# Builds the Angular SPA and publishes it to GitHub Pages at
+#   https://mohan91002.github.io/WeatherApplication/
+#
+# The SPA needs the API URL baked in at build time: set the repo variable
+# API_BASE_URL to the deployed Fly.io URL (https://<app>.fly.dev), then re-run
+# this workflow. Until then the UI loads but shows no live data.
+
+on:
+  push:
+    branches: [main]
+    paths: ['frontend/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+      - run: corepack enable
+      - run: yarn install --frozen-lockfile
+      - name: Inject API base URL (empty = same origin, i.e. no data until set)
+        run: sed -i "s|__API_BASE_URL__|${{ vars.API_BASE_URL }}|g" src/environments/environment.production.ts
+      - name: Build SPA with the Pages base-href
+        run: node_modules/.bin/ng build --base-href "/WeatherApplication/"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist/weather-frontend/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

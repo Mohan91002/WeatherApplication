@@ -1,0 +1,42 @@
+# Fly.io deployment for the WeatherApplication .NET 10 API.
+#
+# The Docker build context is this backend/ folder (the Dockerfile lives in
+# cloud/ and expects that context), so deploy from here:
+#
+#   cd backend
+#   fly launch --no-deploy --copy-config --name <your-unique-app-name>   # first time
+#   fly deploy
+#
+# After deploy, note the URL (https://<app>.fly.dev) and:
+#   1) set the GitHub repo variable API_BASE_URL to it (for the SPA build), and
+#   2) if your Pages URL differs, update Cors__AllowedOrigins__0 below + `fly deploy`.
+
+app = "weatherapplication-api"
+primary_region = "iad"
+
+[build]
+  dockerfile = "../cloud/Dockerfile"
+
+[env]
+  ASPNETCORE_ENVIRONMENT = "Production"
+  ASPNETCORE_FORWARDEDHEADERS_ENABLED = "true"
+  # Allow the GitHub Pages SPA origin to call this API (CORS allow-list).
+  Cors__AllowedOrigins__0 = "https://mohan91002.github.io"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    method = "get"
+    path = "/health"
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
