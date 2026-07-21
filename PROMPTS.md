@@ -62,7 +62,9 @@ Two long messages (#10, #11, #14) contained repeated phrases in the original.
 
 Backfilled in order from the session summary (25–41) and live context (42+). The
 longest prompts may differ slightly from the exact original wording where the
-summary condensed repeated phrasing. Recorded live, as typed, from here on.
+summary condensed repeated phrasing. Recorded live, as typed. Logging was paused
+after #56 at the user's request (#57); #57–#61 were later backfilled, and #58
+condenses a pasted CI result.
 (One word in prompts #42 and #53 was later redacted at the user's request.)
 
 25. Run this
@@ -128,6 +130,16 @@ summary condensed repeated phrasing. Recorded live, as typed, from here on.
 55. some changes done local please push this into remote
 
 56. keep it in root that's fine and run
+
+57. stop the servers please stop auto updation in prompts file
+
+58. [pasted the GitHub Actions run "build-test-deploy #1" — status Failure: deploy job "Input required and not supplied: aws-region", plus Node.js 20 deprecation warnings for actions/checkout, actions/setup-dotnet, actions/setup-node, aws-actions/configure-aws-credentials]
+
+59. yes bump the deprecated action versions
+
+60. according above please change local and remote also
+
+61. please update promptd file what are the prompts are not updated in local and remote
 
 ### Menu selections this session (not typed)
 - Jira ticket creation: **CSV import**
