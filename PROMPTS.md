@@ -63,6 +63,7 @@ Two long messages (#10, #11, #14) contained repeated phrases in the original.
 Backfilled in order from the session summary (25–41) and live context (42+). The
 longest prompts may differ slightly from the exact original wording where the
 summary condensed repeated phrasing. Recorded live, as typed, from here on.
+(One word in prompts #42 and #53 was later redacted at the user's request.)
 
 25. Run this
 
@@ -98,7 +99,7 @@ summary condensed repeated phrasing. Recorded live, as typed, from here on.
 
 41. check every file if any thing miss please keep up to date.
 
-42. update those two docs also please please remove outlook things and outlook section from front end and backend relavant test cases and remove claude word where ever you find.
+42. update those two docs also please please remove outlook things and outlook section from front end and backend relavant test cases and remove [redacted] word where ever you find.
 
 43. understand the project structure give me like sprint wise and how many tickets wwe can create how many epics how many stories  wise please create in jira give
 
@@ -120,7 +121,9 @@ summary condensed repeated phrasing. Recorded live, as typed, from here on.
 
 52. make the repo public
 
-53. in local and reote please delete or remove word clude word and claude folder also if it not making any issue or error
+53. in local and reote please delete or remove word [redacted] word and [redacted] folder also if it not making any issue or error
+
+54. redact the two PROMPTS.md lines
 
 ### Menu selections this session (not typed)
 - Jira ticket creation: **CSV import**
