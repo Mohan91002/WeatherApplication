@@ -20,6 +20,38 @@ Baselines come from [PROJECT_PLAN.md](PROJECT_PLAN.md) §4.5 (build) and §7 (AW
 
 ---
 
+## Decision flow — cheapest hosting by traffic
+
+```mermaid
+flowchart TD
+    A(["Deploying WeatherApplication"]) --> B{"Production or<br/>portfolio / demo?"}
+
+    B -->|"Portfolio / demo"| C["SPA: Cloudflare / GitHub Pages<br/>API: Lambda or Fly.io free tier"]
+    C --> C1(["~$0–5 / mo"])
+
+    B -->|"Production"| D{"Traffic level?"}
+
+    D -->|"Low / flat"| E["SPA: S3 + CloudFront free tier<br/>API: App Runner min 0.25 vCPU / 0.5 GB<br/>no ElastiCache, no WAF<br/>logs 7–14 days"]
+    E --> E1(["~$15–30 / mo"])
+
+    D -->|"Spiky / unpredictable"| F["SPA: S3 + CloudFront<br/>API: Lambda + API Gateway<br/>or Fargate Spot, pay-per-use"]
+    F --> F1(["~$5–20 / mo, scales to zero"])
+
+    D -->|"Steady / high"| G["SPA: S3 + CloudFront + WAF<br/>API: App Runner or Fargate 2–3x<br/>ElastiCache shared cache<br/>Compute Savings Plan"]
+    G --> G1(["~$90–130 / mo"])
+
+    C1 --> H{{"Always on: AWS Budgets + anomaly alerts,<br/>cost tags, egress alarm, Free Tier for 12 months"}}
+    E1 --> H
+    F1 --> H
+    G1 --> H
+```
+
+> Same app, four price points. The design (static SPA + small stateless API +
+> keyless upstreams + 1-hour cache) lets you slide down this tree without code
+> changes — only the hosting target differs.
+
+---
+
 ## 1. Build-phase cost
 
 - **AI-assisted delivery is the dominant lever.** ~$20–80 of LLM usage + review vs
