@@ -51,8 +51,10 @@ jobs:
 
   deploy:
     needs: [backend-test, frontend-test]
-    # Deploy only on push to main / manual dispatch — never on pull requests.
-    if: github.event_name != 'pull_request'
+    # Deploy only on push to main / manual dispatch, and only once AWS is
+    # configured (the AWS_REGION repo variable is set). Until then the job is
+    # skipped (not failed), so CI stays green. See cloud/DEPLOY.md for setup.
+    if: ${{ github.event_name != 'pull_request' && vars.AWS_REGION != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
