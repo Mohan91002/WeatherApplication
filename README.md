@@ -77,7 +77,8 @@ WeatherApplication/
 ├── DEPENDENCIES.md           # full dependency & toolchain inventory
 ├── PROJECT_PLAN.md           # scope, estimates, cost
 ├── COST_OPTIMIZATION.md      # end-to-end cost-optimization guide
-├── PROMPTS.md
+├── PROMPTS.md                # verbatim log of the prompts used to build this
+├── PROMPTS_REFINED.md        # those prompts rewritten as clean, reusable prompts
 ├── CONTRIBUTING.md           # branch/PR workflow
 ├── WORKFLOW.md               # Jira <-> git: issue -> branch -> PR mapping
 ├── jira-backlog.csv          # importable Jira backlog (6 epics / 27 stories / 78 sub-tasks)
