@@ -54,7 +54,7 @@ WeatherApplication/
 ├── backend/                  # C# / .NET 10 API — ALL business logic
 │   ├── Program.cs                 # host wiring: services, CORS, middleware
 │   ├── Endpoints/                 # HTTP routes (WeatherEndpoints.cs)
-│   ├── Models/                    # DTOs (WeatherForecast, CountryInfo, RegionWeather, …)
+│   ├── Models/                    # DTOs (CountryInfo, RegionWeather, RegionMergeRequest, …)
 │   ├── Services/                  # weather/FX integration, classification
 │   ├── Data/Countries.cs          # 253 countries/territories (name, capital, coords, currency, year)
 │   ├── Properties/                # launchSettings.json
@@ -99,7 +99,7 @@ Everything that isn't purely visual is server-side:
 
 | Method | Route | Purpose |
 | ------ | ----- | ------- |
-| `GET`  | `/weatherforecast` | Mock 7-day forecast (starts Wednesday) |
+| `GET`  | `/health` | Liveness probe (App Runner / load-balancer health check) |
 | `GET`  | `/api/countries` | The country dataset |
 | `GET`  | `/api/regions` | Live weather + air quality + currency, merged server-side |
 | `POST` | `/api/regions/merge` | Fallback: merges raw Open-Meteo + FX results relayed by the browser |

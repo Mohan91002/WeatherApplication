@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, forkJoin, map, of, retry, switchMap, tap } from 'rxjs';
-import { WeatherForecast } from '../models/weather-forecast.model';
 import { RegionWeather } from '../models/region-weather.model';
 import { environment } from '../../environments/environment';
 
@@ -51,8 +50,7 @@ interface WeatherCache {
 }
 
 /**
- * Talks to the .NET API for everything: the 7-day forecast and the live
- * weather + air quality for every country.
+ * Talks to the .NET API for the live weather + air quality for every country.
  *
  * All business logic — the country dataset, the Open-Meteo integration, the
  * merge and the weather/AQI classification — lives in the backend. The primary
@@ -68,7 +66,6 @@ interface WeatherCache {
 @Injectable({ providedIn: 'root' })
 export class WeatherService {
   private static readonly BASE_URL = environment.apiBaseUrl;
-  private static readonly FORECAST_URL = `${WeatherService.BASE_URL}/weatherforecast`;
   private static readonly REGIONS_URL = `${WeatherService.BASE_URL}/api/regions`;
   private static readonly COUNTRIES_URL = `${WeatherService.BASE_URL}/api/countries`;
   private static readonly MERGE_URL = `${WeatherService.BASE_URL}/api/regions/merge`;
@@ -80,13 +77,6 @@ export class WeatherService {
   private static readonly CACHE_TTL_MS = 60 * 60 * 1000;
 
   constructor(private readonly http: HttpClient) {}
-
-  /**
-   * Fetches the 7-day forecast from the backend.
-   */
-  getForecast(): Observable<WeatherForecast[]> {
-    return this.http.get<WeatherForecast[]>(WeatherService.FORECAST_URL);
-  }
 
   /**
    * Returns cached live weather + air quality if still fresh; otherwise asks the

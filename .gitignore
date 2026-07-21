@@ -41,6 +41,6 @@ crash.log
 Thumbs.db
 
 # ---------------------------------------------------------------------------
-# Claude Code: share launch.json, keep local settings out of the repo
+# Editor/tooling config: share launch.json, keep local machine settings out
 # ---------------------------------------------------------------------------
 .claude/settings.local.json

@@ -14,14 +14,13 @@ monthly cost), and a **go‑live plan**.
 
 | Area | Detail |
 | ---- | ------ |
-| Backend | .NET 10 minimal API (`WeatherApplication`): endpoints `/weatherforecast`, `/api/countries`, `/api/regions`, `POST /api/regions/merge` |
-| Backend services | `WeatherClassifier`, `Localizer` (7 languages), `CurrencyRatesService`, `RegionWeatherService`; in‑memory cache; typed `HttpClient` |
-| Data | 253 countries + India union territories (name, capital, flag, coords, currency, founding year) |
+| Backend | .NET 10 minimal API (`WeatherApplication`): endpoints `/health`, `/api/countries`, `/api/regions`, `POST /api/regions/merge` |
+| Backend services | `WeatherClassifier`, `CurrencyRatesService`, `RegionWeatherService`; in‑memory cache; typed `HttpClient` |
+| Data | 253 countries + India union territories (name, capital, flag, coords, currency, founding year, official language) |
 | Integrations | Open‑Meteo (weather + air quality), open.er‑api (FX), flagcdn (flags), Wikidata + Natural Earth + mledoze (build‑time data) |
-| Frontend | Angular 18 SPA: station cards, world‑extremes header, forecast, interactive world‑map backdrop |
-| Frontend features | Sort (country/capital/AQI/year), search, favourites, infinite scroll + scroll‑up unload, currency, timezone (IST · UTC+5:30), founding year |
-| i18n | Auto‑locale (en/hi/es/fr/ar/zh/ja) + switcher + Arabic RTL; UI strings in Angular, weather/AQI terms localized by the backend |
-| Tests | Backend xUnit **59**, Frontend Karma/Jasmine **37** |
+| Frontend | Angular 18 SPA (English‑only): station cards, world‑extremes header, interactive world‑map backdrop |
+| Frontend features | Sort (country/capital/AQI/year), search, favourites, infinite scroll + scroll‑up unload, currency, timezone (IST · UTC+5:30), founding year, official language |
+| Tests | Backend xUnit **42**, Frontend Karma/Jasmine **33** |
 
 ---
 
@@ -31,7 +30,7 @@ monthly cost), and a **go‑live plan**.
 - C# 13 / .NET 10, ASP.NET Core **Minimal APIs**
 - Dependency Injection, `IMemoryCache`, `IHttpClientFactory` (typed clients)
 - `System.Text.Json` (custom DTOs, snake_case mapping)
-- Resilience: retry, graceful fallback, chunking, per‑request localization
+- Resilience: retry, graceful fallback, chunking
 - Testing: **xUnit**, `WebApplicationFactory` integration tests
 - OpenAPI
 
@@ -39,9 +38,9 @@ monthly cost), and a **go‑live plan**.
 - TypeScript, **Angular 18** standalone components
 - **Signals** (`signal`, `computed`, `effect`), new control flow (`@if/@for/@defer`)
 - RxJS (`forkJoin`, `switchMap`, `retry`, `catchError`)
-- SCSS design system, responsive layout, **RTL**, accessibility (focus rings, reduced‑motion)
-- `Intl` API (locale number/time), runtime i18n
-- SVG data‑viz (equirectangular map projection), interactive pan/zoom/parallax
+- SCSS design system, responsive layout, accessibility (focus rings, reduced‑motion)
+- `Intl` API (locale number/time)
+- SVG data‑viz (equirectangular map projection), interactive pan/zoom on card hover
 - Testing: **Karma + Jasmine**, `HttpTestingController`
 
 **Data engineering / tooling**
@@ -49,7 +48,7 @@ monthly cost), and a **go‑live plan**.
 - Git, Angular CLI, dotnet CLI, npm/yarn
 
 **Design**
-- Distinctive visual direction ("Synoptic" station board), typography pairing, motion, colour systems
+- Distinctive visual direction (a weather‑station board), typography pairing, motion, colour systems
 
 ---
 
@@ -59,17 +58,17 @@ monthly cost), and a **go‑live plan**.
                         ┌──────────────────────────────────────────┐
                         │                 Browser                   │
                         │   Angular 18 SPA (static assets)          │
-                        │   • station cards, world map, i18n         │
+                        │   • station cards, world map               │
                         └───────────────┬───────────────────────────┘
-                                        │ HTTPS (REST + ?lang=)
+                                        │ HTTPS (REST)
                                         ▼
                         ┌──────────────────────────────────────────┐
                         │        .NET 10 API (WeatherApplication)    │
-                        │  /weatherforecast  /api/countries          │
+                        │  /health           /api/countries          │
                         │  /api/regions      /api/regions/merge      │
                         │                                            │
                         │  RegionWeatherService ── in‑memory cache   │
-                        │  WeatherClassifier · Localizer             │
+                        │  WeatherClassifier                         │
                         │  CurrencyRatesService                      │
                         └───────┬───────────────────────┬───────────┘
                                 │ (primary path)         │
@@ -79,7 +78,7 @@ monthly cost), and a **go‑live plan**.
 
   Fallback: if the API host can't reach upstream, the browser relays raw
   Open‑Meteo + FX data to POST /api/regions/merge — backend still does all
-  merging / classification / localization (no business logic in the client).
+  merging / classification (no business logic in the client).
 ```
 
 **Deployment topology (AWS):** SPA on S3 + CloudFront; API as a container on
@@ -101,7 +100,6 @@ optional ElastiCache for shared cache when running >1 instance.
 | QA engineer | 0.5 |
 | DevOps / Cloud | 0.5 |
 | UX / Designer | 0.5 |
-| Localization reviewer (7 langs) | 0.25 (vendor) |
 
 ### 4.2 Effort by epic (person‑hours)
 
@@ -110,11 +108,10 @@ optional ElastiCache for shared cache when running >1 instance.
 | E1 | Backend foundation + weather API | 40 |
 | E2 | Currency + founding‑year data | 24 |
 | E3 | Frontend design system + components + interactive map | 94 |
-| E4 | Localization (i18n, 7 langs + backend) | 54 |
-| E5 | Testing (unit, integration, QA, a11y) | 68 |
-| E6 | DevOps / AWS / CI‑CD | 48 |
-| E7 | PM, ceremonies, UX, buffer | 94 |
-| | **Total** | **≈ 422 h** |
+| E4 | Testing (unit, integration, QA, a11y) | 68 |
+| E5 | DevOps / AWS / CI‑CD | 48 |
+| E6 | PM, ceremonies, UX, buffer | 94 |
+| | **Total** | **≈ 368 h** |
 
 ### 4.3 Sprints
 
@@ -125,16 +122,16 @@ optional ElastiCache for shared cache when running >1 instance.
 | Sprint | Focus |
 | ------ | ----- |
 | Sprint 1 | E1 backend API + E3 frontend scaffold/design tokens |
-| Sprint 2 | E2 currency/year + E3 cards, panel, forecast |
-| Sprint 3 | E3 interactive map + E4 localization |
-| Sprint 4 | E5 testing/QA + E6 deploy + hardening + go‑live |
+| Sprint 2 | E2 currency/year + E3 cards, panel |
+| Sprint 3 | E3 interactive map + responsive polish |
+| Sprint 4 | E4 testing/QA + E5 deploy + hardening + go‑live |
 
 ### 4.4 Jira ticket breakdown (≈ 150 issues total)
 
 | Type | Count |
 | ---- | ----- |
-| Epics | 7 |
-| Stories | ~35 |
+| Epics | 6 |
+| Stories | ~30 |
 | Sub‑tasks | ~90 |
 | Spikes | ~5 |
 | Bugs (expected) | ~15–20 |
@@ -142,18 +139,18 @@ optional ElastiCache for shared cache when running >1 instance.
 Sample epic → story map:
 
 - **E3 Frontend** → stories: design tokens, station card, regions panel,
-  sort/search, favourites, infinite scroll + unload, forecast, world map,
+  sort/search, favourites, infinite scroll + unload, world map,
   responsive → each 2–4 sub‑tasks (component, styles, spec, review).
 
 ### 4.5 Cost (build)
 
-| Blended rate | 422 h build | + 25 % PM/QA overhead |
+| Blended rate | 368 h build | + 25 % PM/QA overhead |
 | ------------ | ----------- | --------------------- |
-| $40/h (offshore) | $16,880 | ~$21,100 |
-| $75/h (blended) | $31,650 | ~$39,600 |
-| $120/h (onshore) | $50,640 | ~$63,300 |
+| $40/h (offshore) | $14,720 | ~$18,400 |
+| $75/h (blended) | $27,600 | ~$34,500 |
+| $120/h (onshore) | $44,160 | ~$55,200 |
 
-> **Rule of thumb:** ~**$20k–$60k** one‑time build depending on region/seniority.
+> **Rule of thumb:** ~**$18k–$55k** one‑time build depending on region/seniority.
 
 ---
 
@@ -165,17 +162,17 @@ This app was built conversationally with an AI agent + one human reviewer.
 | ------ | ----------- | -------------------------- |
 | Elapsed time | ~8 weeks | ~1 working session (hours) |
 | People | 3.5–4 FTE | 1 human (review/direction) + agent |
-| Effort | ~422 h | ~15–20 human prompts + review |
+| Effort | ~368 h | ~15–20 human prompts + review |
 | Build cost | $20k–$60k | LLM usage ≈ **$20–$80** + reviewer time |
-| Tests written | manual | 96 automated tests generated + run |
+| Tests written | manual | 75 automated tests generated + run |
 
 **Prompts used in this session (high‑level):** ~15 substantive prompts
-(backend split, live currency, world map, run/verify, localization + rename +
+(backend split, live currency, world map, run/verify, official languages, rename +
 territories, borders/flag‑fill, revert). Net **~10–15 feature prompts**.
 
 > AI‑assisted is ~**10–20× faster** and ~**100–1000× cheaper on labour** for a
 > build of this size, **provided** a human reviews architecture, correctness,
-> translations, and security before go‑live. It does **not** remove the need for
+> and security before go‑live. It does **not** remove the need for
 > QA, a11y, and production hardening.
 
 ---
@@ -187,28 +184,26 @@ in (stop servers before builds; one build at a time; clear caches) to keep RAM
 low.
 
 ### Phase A — Backend
-1. `Create a .NET 10 minimal API project "WeatherApplication" with GET /weatherforecast, CORS for http://localhost:4200, and OpenAPI. Keep all business logic server-side.`
+1. `Create a .NET 10 minimal API project "WeatherApplication" with a GET /health check, CORS for http://localhost:4200, and OpenAPI. Keep all business logic server-side.`
 2. `Add a Countries dataset (name, capital, ISO code, flag, lat/lon) as backend data served at GET /api/countries. Generate it from the mledoze/countries dataset.`
 3. `Add WeatherClassifier: WMO code → description, US AQI → category, °C → °F, with unit tests.`
 4. `Add RegionWeatherService that fetches live weather + air quality from Open-Meteo (chunked, retry once, merge) with an in-memory 1h cache; expose GET /api/regions. Add a POST /api/regions/merge browser-relay fallback.`
-5. `Enrich the dataset with currency (code + symbol) and founding year (Wikidata inception). Add a live FX service (open.er-api.com, cached) and include currency + rate in /api/regions.`
-6. `Add a Localizer (en/hi/es/fr/ar/zh/ja) for weather descriptions + AQI categories; accept ?lang= on /api/regions and /api/regions/merge; keep numeric fields canonical.`
-7. `Add an xUnit test project (WeatherApplication.Tests): classifier boundaries, merge, localization, and WebApplicationFactory endpoint tests. Run "dotnet test".`
+5. `Enrich the dataset with currency (code + symbol), founding year (Wikidata inception), and official language. Add a live FX service (open.er-api.com, cached) and include currency + rate in /api/regions.`
+6. `Add an xUnit test project (WeatherApplication.Tests): classifier boundaries, merge, and WebApplicationFactory endpoint tests. Run "dotnet test".`
 
 ### Phase B — Frontend
-8. `Scaffold an Angular 18 standalone SPA in /frontend that calls the .NET API; presentation-only, no business logic. Use signals.`
-9. `Design a distinctive "Synoptic" weather-station UI: design tokens, type pairing, station-model cards (flag, capital, country, local time, temp/air/currency), a live world-extremes header.`
-10. `Add sort (country/capital/AQI/year), search, favourites (localStorage), and infinite scroll that loads 5 more near the bottom and unloads 5 when scrolling back up.`
-11. `Add an interactive world-map backdrop (equirectangular SVG) that pans/zooms to the hovered card and parallax-follows the cursor; a MapFocusService shares the hovered location.`
-12. `Add timezone label (IST · UTC+5:30 style) and founding year to each card; keep every card the same size and responsive (5→3→2→1 columns).`
-13. `Add runtime i18n: detect browser locale (en/hi/es/fr/ar/zh/ja), a language switcher, reactive t(), Arabic RTL; pass ?lang= to the API and re-fetch on switch.`
-14. `Add Karma/Jasmine specs for the i18n service, weather service (primary + fallback), region card, regions panel, and world map. Run headless with a hardened Chrome launcher (--no-sandbox, longer timeouts).`
+7. `Scaffold an Angular 18 standalone SPA in /frontend that calls the .NET API; presentation-only, no business logic. Use signals.`
+8. `Design a distinctive weather-station UI: design tokens, type pairing, station-model cards (flag, capital, country, local time, official language, temp/air/currency), a live world-extremes header.`
+9. `Add sort (country/capital/AQI/year), search, favourites (localStorage), and infinite scroll that loads 5 more near the bottom and unloads 5 when scrolling back up.`
+10. `Add an interactive world-map backdrop (equirectangular SVG) that pans/zooms to the hovered card; a MapFocusService shares the hovered location.`
+11. `Add timezone label (IST · UTC+5:30 style) and founding year to each card; keep every card the same size and responsive (5→3→2→1 columns).`
+12. `Add Karma/Jasmine specs for the weather service (primary + fallback), the UI visuals helpers, region card, regions panel, and world map. Run headless with a hardened Chrome launcher (--no-sandbox, longer timeouts).`
 
 ### Phase C — Deploy (AWS)
-15. `Add a multi-stage Dockerfile for the .NET API (publish trimmed, non-root, expose 8080) and a .dockerignore.`
-16. `Add GitHub Actions: build+test backend, build+test frontend, build+push image to ECR, deploy API to App Runner, sync SPA to S3 + invalidate CloudFront.`
-17. `Provision AWS with Terraform: ECR, App Runner service (or ECS Fargate + ALB), S3 static site, CloudFront (OAC), Route 53 record, ACM cert, CloudWatch log group.`
-18. `Add health checks (/health), structured logging, and a CloudWatch dashboard (latency, 5xx, cache hit rate). Configure autoscaling min 1 / max 3.`
+13. `Add a multi-stage Dockerfile for the .NET API (publish trimmed, non-root, expose 8080) and a .dockerignore.`
+14. `Add GitHub Actions: build+test backend, build+test frontend, build+push image to ECR, deploy API to App Runner, sync SPA to S3 + invalidate CloudFront.`
+15. `Provision AWS with Terraform: ECR, App Runner service (or ECS Fargate + ALB), S3 static site, CloudFront (OAC), Route 53 record, ACM cert, CloudWatch log group.`
+16. `Add health checks (/health), structured logging, and a CloudWatch dashboard (latency, 5xx, cache hit rate). Configure autoscaling min 1 / max 3.`
 
 > **RAM hygiene note for the agent:** *"Before any build or test, stop running
 > dev servers; run only one build at a time; after verifying, stop preview
@@ -267,14 +262,13 @@ For a small app, a **CloudWatch dashboard (~$3/mo) + light on‑call** is enough
 | Build complete | Week 6 | Session 1 |
 | Test + QA sign‑off | Week 7 | + review pass |
 | Staging deploy | Week 7 | same day |
-| UAT + a11y + i18n review | Week 8 | 1–2 days (human) |
+| UAT + a11y review | Week 8 | 1–2 days (human) |
 | Production go‑live | End Week 8 | Week 1 |
 | Run cost | ~$35–130/mo AWS + support | same AWS + minimal support |
 
 **Go‑live checklist:** health checks green · autoscaling set · HTTPS + custom
 domain · CloudWatch alarms (5xx, latency, cache) · logs retained · CORS locked
-to the SPA origin · rate‑limit/WAF · rollback plan · translations reviewed by
-native speakers · Lighthouse/a11y pass.
+to the SPA origin · rate‑limit/WAF · rollback plan · Lighthouse/a11y pass.
 
 ---
 
@@ -282,10 +276,10 @@ native speakers · Lighthouse/a11y pass.
 
 | Question | Answer |
 | -------- | ------ |
-| Effort (traditional) | **~422 person‑hours** |
+| Effort (traditional) | **~368 person‑hours** |
 | Team | **~3.5–4 FTE** (BE, FE, QA, DevOps, UX, PO/SM) |
 | Sprints | **4 × 2‑week (~2 months)** |
-| Jira issues | **~150** (7 epics, ~35 stories, ~90 sub‑tasks, ~20 bugs, ~5 spikes) |
+| Jira issues | **~150** (6 epics, ~30 stories, ~90 sub‑tasks, ~20 bugs, ~5 spikes) |
 | Build cost | **~$20k–$60k** (rate‑dependent) |
 | AI prompts | **~15 feature prompts** in one session |
 | AI build cost | **~$20–$80** LLM usage + reviewer time |

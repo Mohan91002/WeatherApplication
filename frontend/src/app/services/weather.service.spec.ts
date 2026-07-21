@@ -5,11 +5,9 @@ import {
 } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { WeatherService } from './weather.service';
-import { WeatherForecast } from '../models/weather-forecast.model';
 import { RegionWeather } from '../models/region-weather.model';
 
 const BASE = 'http://localhost:5135';
-const FORECAST = `${BASE}/weatherforecast`;
 const REGIONS = `${BASE}/api/regions`;
 const COUNTRIES = `${BASE}/api/countries`;
 const MERGE = `${BASE}/api/regions/merge`;
@@ -55,19 +53,6 @@ describe('WeatherService', () => {
   });
 
   afterEach(() => httpMock.verify());
-
-  it('requests the forecast from the .NET API', () => {
-    const mock: WeatherForecast[] = [
-      { date: '2026-07-16', temperatureC: 20, temperatureF: 68, summary: 'Mild' },
-    ];
-    let result: WeatherForecast[] | undefined;
-    service.getForecast().subscribe((data) => (result = data));
-
-    const req = httpMock.expectOne(FORECAST);
-    expect(req.request.method).toBe('GET');
-    req.flush(mock);
-    expect(result).toEqual(mock);
-  });
 
   it('uses /api/regions directly when the backend returns live data', () => {
     const live = [liveRegion()];

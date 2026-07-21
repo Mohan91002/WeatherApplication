@@ -56,24 +56,3 @@ CloudFront.
 Stop dev servers before building; run one build at a time; delete stale
 `backend/bin backend/obj frontend/dist frontend/.angular` when regenerating; stop preview
 servers after verifying — keeps RAM low.
-
-## Rename the project folder (`WebApplication` → `WeatherApplication`)
-The project, assembly, namespaces, `launch.json`, README and tests are already
-`WeatherApplication`; only the top-level **folder** is still named
-`WebApplication`. Renaming it is optional and purely cosmetic — no code
-references the folder name, so the app builds/runs identically either way.
-
-It **cannot** be renamed while an editor/agent session, terminal, or dev server
-has it open (Windows won't rename a directory that is a process's current
-directory — you'll get *"The process cannot access the file because it is being
-used by another process"*). Do it externally:
-
-1. Close any editor/terminal/Claude session open in the folder; stop the dev
-   servers; if OneDrive is mid-sync, pause it.
-2. Rename it — Explorer (right-click → **Rename** → `WeatherApplication`), or a
-   terminal that is **not** inside the folder:
-   ```powershell
-   Set-Location "C:\Users\<you>\OneDrive - Accenture\Skill Dev\Claude"
-   Rename-Item "WebApplication" "WeatherApplication"
-   ```
-3. Reopen the project from `...\Claude\WeatherApplication`. Nothing else changes.

@@ -1,47 +1,6 @@
 /**
- * Shared helpers that map weather data to vibrant visuals, used by both the
- * forecast dashboard and the rotating regions panel.
+ * Shared helpers that map weather data to visuals for the regions panel.
  */
-
-/**
- * Picks a vibrant gradient based on the temperature so hot and cold values
- * are instantly distinguishable.
- *
- * @param temperatureC the temperature in Celsius
- * @returns a CSS linear-gradient value
- */
-export function gradientForTemperature(temperatureC: number): string {
-  if (temperatureC <= 0) {
-    return 'linear-gradient(135deg, #00c6fb, #005bea)';
-  }
-  if (temperatureC <= 15) {
-    return 'linear-gradient(135deg, #43e97b, #38f9d7)';
-  }
-  if (temperatureC <= 30) {
-    return 'linear-gradient(135deg, #fddb92, #f7797d)';
-  }
-  return 'linear-gradient(135deg, #ff512f, #dd2476)';
-}
-
-/**
- * Returns a weather-appropriate emoji for the given summary.
- *
- * @param summary the textual weather summary
- * @returns an emoji describing the weather
- */
-export function iconForSummary(summary: string): string {
-  const value = summary.toLowerCase();
-  if (value.includes('freez') || value.includes('chill') || value.includes('cool')) {
-    return '❄️';
-  }
-  if (value.includes('scorch') || value.includes('swelter') || value.includes('hot')) {
-    return '🔥';
-  }
-  if (value.includes('warm') || value.includes('balmy')) {
-    return '☀️';
-  }
-  return '⛅';
-}
 
 /**
  * Maps a WMO weather interpretation code (as returned by Open-Meteo) to an emoji.

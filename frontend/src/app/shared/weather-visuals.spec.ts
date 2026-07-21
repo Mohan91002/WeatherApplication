@@ -1,7 +1,5 @@
 import {
   aqiColor,
-  gradientForTemperature,
-  iconForSummary,
   iconForWeatherCode,
   skyCover,
   temperatureColor,
@@ -54,22 +52,6 @@ describe('weather-visuals (pure UI helpers)', () => {
       expect(iconForWeatherCode(2)).toBe('⛅');
       expect(iconForWeatherCode(65)).toBe('🌧️');
       expect(iconForWeatherCode(95)).toBe('⛈️');
-    });
-  });
-
-  describe('gradientForTemperature', () => {
-    it('returns a CSS linear-gradient', () => {
-      expect(gradientForTemperature(-5)).toContain('linear-gradient');
-      expect(gradientForTemperature(45)).toContain('linear-gradient');
-    });
-  });
-
-  describe('iconForSummary', () => {
-    it('matches keywords to emoji', () => {
-      expect(iconForSummary('Freezing')).toBe('❄️');
-      expect(iconForSummary('Scorching')).toBe('🔥');
-      expect(iconForSummary('Balmy')).toBe('☀️');
-      expect(iconForSummary('Overcast')).toBe('⛅'); // default
     });
   });
 

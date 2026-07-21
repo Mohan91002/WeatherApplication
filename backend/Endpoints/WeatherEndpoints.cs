@@ -11,21 +11,11 @@ namespace WeatherApi.Endpoints;
 /// </summary>
 public static class WeatherEndpoints
 {
-    private static readonly string[] Summaries =
-    [
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild",
-        "Warm", "Balmy", "Hot", "Sweltering", "Scorching",
-    ];
-
     public static IEndpointRouteBuilder MapWeatherEndpoints(this IEndpointRouteBuilder app)
     {
         // Liveness/readiness probe for the load balancer / App Runner health check.
         app.MapGet("/health", () => Results.Ok(new { status = "healthy" }))
             .WithName("Health");
-
-        // Mock 7-day forecast starting on the upcoming Wednesday.
-        app.MapGet("/weatherforecast", GetForecast)
-            .WithName("GetWeatherForecast");
 
         // The country dataset, owned by the backend. Also used by the browser
         // fallback to know which coordinates to query.
@@ -46,21 +36,5 @@ public static class WeatherEndpoints
             .WithName("MergeRegions");
 
         return app;
-    }
-
-    private static WeatherForecast[] GetForecast()
-    {
-        // The 7-day outlook always begins on the upcoming Wednesday
-        // (today if today is already Wednesday).
-        var today = DateOnly.FromDateTime(DateTime.Now);
-        var daysUntilWednesday = ((int)DayOfWeek.Wednesday - (int)today.DayOfWeek + 7) % 7;
-        var start = today.AddDays(daysUntilWednesday);
-
-        return Enumerable.Range(0, 7).Select(offset =>
-            new WeatherForecast(
-                start.AddDays(offset),
-                Random.Shared.Next(-20, 55),
-                Summaries[Random.Shared.Next(Summaries.Length)]))
-        .ToArray();
     }
 }
